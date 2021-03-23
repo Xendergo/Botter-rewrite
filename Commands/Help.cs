@@ -11,11 +11,13 @@ namespace Commands {
     public string helpShort {get;}
     public string[] signature {get;}
     public TypoableString[] aliases {get;}
+    public string category {get;}
     public Help() {
       help = "Get a list of all commands, or help for a specific one";
       helpShort = "Get help for a command";
       signature = new string[] {"<?command>"};
       aliases = new TypoableString[] {new TypoableString("help", 1), new TypoableString("h", 0), new TypoableString("?", 0)};
+      category = "Help";
     }
 
     public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
@@ -48,8 +50,14 @@ Here's a list of commands:
     private string GenerateCommandList() {
       List<string> commands = new List<string>();
 
+      string pCategory = "";
       foreach (ICommand command in CommandManager.commandsSet) {
+        if (pCategory != command.category) {
+          commands.Add("");
+          commands.Add($"**{command.category}:**");
+        }
         commands.Add($"`{command.aliases[0].value}`: {command.helpShort}");
+        pCategory = command.category;
       }
 
       return string.Join('\n', commands);

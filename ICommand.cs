@@ -10,5 +10,6 @@ interface ICommand {
   public string[] signature {get;}
   // First alias is considered the main one
   public TypoableString[] aliases {get;}
+  public string category {get;}
   public Task Exec(DiscordClient client, string[] args, DiscordMessage message, Guild guild);
 }
