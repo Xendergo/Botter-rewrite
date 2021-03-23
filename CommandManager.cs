@@ -23,18 +23,24 @@ class CommandManager {
 
     Guild guild = await Database.getGuild(messageArgs.Guild.Id);
 
-    if (!guild.checkPrefix(text[0])) return;
-    
-    TypoableString corrected = TypoableString.FindClosestString(text[1], commands.Keys);
+    Channel channel = guild.getChannel(msg.ChannelId);
 
-    if (corrected == null) {
-      await msg.RespondAsync($"There is no command with name `{text[1]}`");
+    try {
+      if (!guild.checkPrefix(text[0])) return;
+      
+      TypoableString corrected = TypoableString.FindClosestString(text[1], commands.Keys);
+
+      if (corrected == null) {
+        await msg.RespondAsync($"There is no command with name `{text[1]}`");
+      }
+
+      string[] args = new string[text.Length - 2];
+      Array.Copy(text, 2, args, 0, args.Length);
+
+      await commands[corrected].Exec(client, args, msg, guild);
+    } catch (Exception e) {
+      channel.Error(e, msg);
     }
-
-    string[] args = new string[text.Length - 2];
-    Array.Copy(text, 2, args, 0, args.Length);
-
-    await commands[corrected].Exec(client, args, msg, guild);
   }
 
   public static void AddCommandsToDictionary() {
@@ -47,6 +53,8 @@ class CommandManager {
 
   public static void AddCommands() {
     commandsSet.Add(new Help());
+    commandsSet.Add(new Src());
+    commandsSet.Add(new Debug());
 
     AddCommandsToDictionary();
   }

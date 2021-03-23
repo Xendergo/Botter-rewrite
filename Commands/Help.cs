@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
@@ -41,7 +40,7 @@ Here's a list of commands:
         string aliases = cmd.aliases.Length > 1 ? $", aliases: `{string.Join("`, `", cmd.aliases.Skip(1))}`" : "";
         await msg.RespondAsync($@"
 `{cmd.aliases[0]}` {aliases}
-`{cmd.aliases[0]} {string.Join(' ', cmd.signature)}`
+`botter {cmd.aliases[0]} {string.Join(' ', cmd.signature)}`
 {cmd.help}
         ");
       }
