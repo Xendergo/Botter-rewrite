@@ -27,6 +27,8 @@ For a prefix you can use `botter` {prefixText}
 
 Here's a list of commands:
 {GenerateCommandList()}
+
+Bot written by Xendergo
         ");
       } else {
         TypoableString corrected = TypoableString.FindClosestString(args[0], CommandManager.commands.Keys);
