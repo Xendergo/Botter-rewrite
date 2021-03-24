@@ -41,6 +41,7 @@ class Database {
 
   public static async Task<Guild> getGuild(ulong id) {
     if (guildCache.ContainsKey(id)) {
+      guildCache[id].resetKill();
       return guildCache[id];
     }
 

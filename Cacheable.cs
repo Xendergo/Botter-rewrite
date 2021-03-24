@@ -22,7 +22,7 @@ public abstract class Cacheable<K, V>
         }
         cache.Remove(id);
     }
-    protected void resetKill() {
+    public void resetKill() {
         timeToKill = DateTimeOffset.Now.ToUnixTimeMilliseconds() + 600000;
     }
 }

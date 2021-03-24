@@ -16,22 +16,24 @@ class CommandManager {
 
     string[] text = msg.Content.ToLower().Split(" ");
 
+    Guild guild = await Database.getGuild(messageArgs.Guild.Id);
+
+    Channel channel = guild.getChannel(msg.ChannelId);
+
+    if (!guild.checkPrefix(text[0])) return;
+
     if (text.Length < 2) {
       await msg.RespondAsync("You need to provide a command");
       return;
     }
 
-    Guild guild = await Database.getGuild(messageArgs.Guild.Id);
-
-    Channel channel = guild.getChannel(msg.ChannelId);
-
     try {
-      if (!guild.checkPrefix(text[0])) return;
       
       TypoableString corrected = TypoableString.FindClosestString(text[1], commands.Keys);
 
-      if (corrected == null) {
+      if (corrected is null) {
         await msg.RespondAsync($"There is no command with name `{text[1]}`");
+        return;
       }
 
       string[] args = new string[text.Length - 2];
@@ -53,6 +55,9 @@ class CommandManager {
 
   public static void AddCommands() {
     commandsSet.Add(new Help());
+
+    commandsSet.Add(new Snipe());
+
     commandsSet.Add(new Src());
     commandsSet.Add(new Debug());
 

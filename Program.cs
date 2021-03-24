@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DSharpPlus;
 using Microsoft.Extensions.Configuration;
+using Commands;
 
 namespace Botter_rewrite
 {
@@ -23,6 +24,7 @@ namespace Botter_rewrite
             });
 
             client.MessageCreated += CommandManager.OnMessage;
+            client.MessageDeleted += Snipe.MessageDelete;
 
             await client.ConnectAsync();
 
