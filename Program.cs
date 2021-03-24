@@ -11,7 +11,7 @@ namespace Botter_rewrite
         static void Main(string[] args)
         {
             CommandManager.AddCommands();
-            var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("settings.json").Build();
+            var config = new ConfigurationBuilder().AddJsonFile("C:/All items/projects/Botter rewrite/settings.json").Build();
             MainAsync(config.GetConnectionString(args[0])).GetAwaiter().GetResult();
         }
 

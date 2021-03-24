@@ -34,7 +34,7 @@ namespace Commands {
 
       embed.WithColor(new DiscordColor(0xFF0000));
       embed.WithDescription(snipedMsg.Message);
-      embed.WithFooter($"*- {snipedMsg.AuthorUsername}*");
+      embed.WithFooter($"- {snipedMsg.AuthorUsername}");
 
       await msg.RespondAsync(embed);
     }

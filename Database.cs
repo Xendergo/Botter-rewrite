@@ -7,7 +7,7 @@ class Database {
   private static NpgsqlConnection conn;
   private static Dictionary<ulong, Guild> guildCache = new Dictionary<ulong, Guild>();
   public static async Task Connect() {
-    Process.Start("startDB.bat");
+    Process.Start("C:/All items/projects/Botter rewrite/startDB.bat");
     string connstring = "Server=localhost;Port=5433;Username=postgres";
     conn = new NpgsqlConnection(connstring);
     await conn.OpenAsync();
