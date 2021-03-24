@@ -12,7 +12,7 @@ class CommandManager {
   public static Dictionary<TypoableString, ICommand> commands = new Dictionary<TypoableString, ICommand>();
   public static async Task OnMessage(DiscordClient client, MessageCreateEventArgs messageArgs) {
     DiscordMessage msg = messageArgs.Message;
-    if (msg.Author.IsBot) return;
+    if (msg?.Author?.IsBot == true) return;
 
     string[] text = msg.Content.ToLower().Split(" ");
 
@@ -32,7 +32,7 @@ class CommandManager {
       TypoableString corrected = TypoableString.FindClosestString(text[1], commands.Keys);
 
       if (corrected is null) {
-        await msg.RespondAsync($"There is no command with name `{text[1]}`");
+        await msg.RespondAsync($"There is no command with name `{text[1]}`, say `botter help` is you don't know what to say");
         return;
       }
 
@@ -57,6 +57,7 @@ class CommandManager {
     commandsSet.Add(new Help());
 
     commandsSet.Add(new Snipe());
+    commandsSet.Add(new EditHistory());
 
     commandsSet.Add(new Src());
     commandsSet.Add(new Debug());

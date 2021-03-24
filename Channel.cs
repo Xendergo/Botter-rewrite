@@ -7,10 +7,20 @@ public struct DeletedMessage {
   public string Message;
 }
 
+public class EditedMessage : Cacheable<ulong, EditedMessage> {
+  public string AuthorUsername;
+  public LinkedList<string> history = new LinkedList<string>();
+  public EditedMessage(ulong id, string Username, string first, Dictionary<ulong, EditedMessage> cache) : base(id, cache) {
+    AuthorUsername = Username;
+    history.AddLast(first);
+  }
+}
+
 public class Channel
 {
   public LinkedList<Exception> ErrorStack = new LinkedList<Exception>();
   public LinkedList<DeletedMessage> DeletedMessageStack = new LinkedList<DeletedMessage>();
+  public Dictionary<ulong, EditedMessage> EditedMessages = new Dictionary<ulong, EditedMessage>();
   public void Error(Exception e, DiscordMessage msg) {
     msg.RespondAsync("There was an unexpected error running that command, send `botter debug` for details");
 
@@ -34,5 +44,15 @@ public class Channel
     DeletedMessage msg = DeletedMessageStack.Last.Value;
     DeletedMessageStack.RemoveLast();
     return msg;
+  }
+
+  public void AddEdit(DiscordMessage prev, DiscordMessage current) {
+    ulong id = prev.Id;
+    if (!EditedMessages.ContainsKey(id)) {
+      EditedMessages.Add(id, new EditedMessage(id, prev.Author.Username, prev.Content, EditedMessages));
+    }
+
+    EditedMessages[id].history.AddLast(current.Content);
+    EditedMessages[id].resetKill();
   }
 }

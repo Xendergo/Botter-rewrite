@@ -5,7 +5,7 @@ using System;
 public abstract class Cacheable<K, V>
 {
     private Dictionary<K, V> cache;
-    private K id;
+    public K id;
     private long timeToKill;
 
     public Cacheable(K id, Dictionary<K, V> cache) {

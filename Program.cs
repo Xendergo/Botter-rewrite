@@ -25,6 +25,7 @@ namespace Botter_rewrite
 
             client.MessageCreated += CommandManager.OnMessage;
             client.MessageDeleted += Snipe.MessageDelete;
+            client.MessageUpdated += EditHistory.OnEdit;
 
             await client.ConnectAsync();
 

@@ -14,7 +14,7 @@ namespace Commands {
     public TypoableString[] aliases {get;}
     public string category {get;}
     public Snipe() {
-      help = "Snipe the most recently deleted message, deleted messages are saved for 10 minutes";
+      help = "Snipe the most recently deleted message, deleted messages are saved for at least 10 minutes";
       helpShort = "Snipe a deleted message";
       signature = new string[] {};
       aliases = new TypoableString[] {new TypoableString("snipe", 1)};
