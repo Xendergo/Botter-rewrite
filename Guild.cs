@@ -10,7 +10,7 @@ class Guild : Cacheable<ulong, Guild> {
 
   public bool checkPrefix(string str) {
     base.resetKill();
-    return str == prefix || str == "botter";
+    return (str == prefix || str == "botter") && str != "";
   }
 
   // Channels don't contain any data that needs to be persisted, so I think this is reasonable
