@@ -29,6 +29,10 @@ namespace Commands {
         return;
       }
 
+      SnipeMessage(channel, msg);
+    }
+
+    public static void SnipeMessage(Channel channel, DiscordMessage msg) {
       DeletedMessage snipedMsg = channel.popDeletedMessage();
       DiscordEmbedBuilder embed = new DiscordEmbedBuilder();
 
@@ -36,7 +40,7 @@ namespace Commands {
       embed.WithDescription(snipedMsg.Message);
       embed.WithFooter($"- {snipedMsg.AuthorUsername}");
 
-      await msg.RespondAsync(embed);
+      msg.RespondAsync(embed);
     }
 
     public static async Task MessageDelete(DiscordClient client, MessageDeleteEventArgs args) {

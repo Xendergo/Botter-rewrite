@@ -58,6 +58,7 @@ class CommandManager {
 
     commandsSet.Add(new Snipe());
     commandsSet.Add(new EditHistory());
+    commandsSet.Add(new Shotgun());
 
     commandsSet.Add(new Src());
     commandsSet.Add(new Debug());
