@@ -4,6 +4,7 @@ using DSharpPlus.Entities;
 
 public struct DeletedMessage {
   public string AuthorUsername;
+  public ulong AuthorID;
   public string Message;
 }
 
@@ -36,6 +37,7 @@ public class Channel
   public void pushDeletedMessage(DiscordMessage msg) {
     DeletedMessageStack.AddLast(new DeletedMessage() {
       AuthorUsername = msg.Author.Username,
+      AuthorID = msg.Author.Id,
       Message = msg.Content
     });
   }

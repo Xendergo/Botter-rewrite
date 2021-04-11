@@ -27,8 +27,11 @@ class CommandManager {
       return;
     }
 
+    User user = await Database.getUser(msg.Author.Id);
+
+    user.stats.Interactions++;
+
     try {
-      
       TypoableString corrected = TypoableString.FindClosestString(text[1], commands.Keys);
 
       if (corrected is null) {
@@ -46,9 +49,11 @@ class CommandManager {
         return;
       }
 
-      await command.Exec(client, args, msg, guild);
+      await command.Exec(client, args, msg, guild, user);
     } catch (Exception e) {
       channel.Error(e, msg);
+    } finally {
+      user.updateStats();
     }
   }
 
@@ -77,6 +82,8 @@ class CommandManager {
     commandsSet.Add(new SearchWithSetQuery("aunt", "bunny", 1));
     commandsSet.Add(new SearchWithSetQuery("stepdaughter", "crow", 4));
     commandsSet.Add(new SearchWithSetQuery("blender", "blender", 1));
+
+    commandsSet.Add(new StatsCmd());
  
     commandsSet.Add(new Src());
     commandsSet.Add(new Debug());

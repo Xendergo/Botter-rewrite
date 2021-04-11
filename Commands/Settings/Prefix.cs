@@ -20,7 +20,7 @@ namespace Commands {
       category = "Settings";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
+    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
       await guild.setPrefix(args[0]);
     }
   }

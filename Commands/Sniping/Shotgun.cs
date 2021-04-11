@@ -20,7 +20,7 @@ namespace Commands {
       category = "Sniping";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
+    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
       Channel channel = guild.getChannel(msg.ChannelId);
 
       if (channel.DeletedMessageStack.Last is null) {
@@ -29,7 +29,7 @@ namespace Commands {
       }
 
       while (channel.DeletedMessageStack.Last is not null) {
-        Snipe.SnipeMessage(channel, msg);
+        Snipe.SnipeMessage(channel, msg, user);
       }
     }
   }

@@ -21,7 +21,7 @@ namespace Commands {
       category = "Advanced";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
+    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
       Channel channel = guild.getChannel(msg.ChannelId);
 
       if (channel.ErrorStack.Last is null) {

@@ -22,7 +22,7 @@ namespace Commands {
       category = "Sniping";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
+    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
       Channel channel = guild.getChannel(msg.ChannelId);
 
       if (channel.DeletedMessageStack.Last is null) {
@@ -30,18 +30,28 @@ namespace Commands {
         return;
       }
 
-      SnipeMessage(channel, msg);
+      SnipeMessage(channel, msg, user);
     }
 
-    public static void SnipeMessage(Channel channel, DiscordMessage msg) {
+    public static async void SnipeMessage(Channel channel, DiscordMessage msg, User sniper) {
       DeletedMessage snipedMsg = channel.popDeletedMessage();
       DiscordEmbedBuilder embed = new DiscordEmbedBuilder();
+
+      sniper.stats.PeopleSniped++;
+      if (sniper.id == snipedMsg.AuthorID) {
+        sniper.stats.SelfSniped++;
+        sniper.stats.GotSniped++;
+      } else {
+        User snipee = await Database.getUser(snipedMsg.AuthorID);
+        snipee.stats.GotSniped++;
+        snipee.updateStats();
+      }
 
       embed.WithColor(new DiscordColor(0xFF0000));
       embed.WithDescription(snipedMsg.Message);
       embed.WithFooter($"- {snipedMsg.AuthorUsername}");
 
-      msg.RespondAsync(embed);
+      await msg.RespondAsync(embed);
     }
 
     public static async Task MessageDelete(DiscordClient client, MessageDeleteEventArgs args) {

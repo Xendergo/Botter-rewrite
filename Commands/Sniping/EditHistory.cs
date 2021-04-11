@@ -22,7 +22,7 @@ namespace Commands {
       category = "Sniping";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
+    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
       if (args.Length == 0) {
         await msg.RespondAsync("You must provide a message ID");
         return;

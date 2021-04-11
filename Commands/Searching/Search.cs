@@ -27,9 +27,9 @@ namespace Commands {
       category = "Searching";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
+    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
       try {
-        await msg.RespondAsync(await RequestImage(args[0]));
+        await msg.RespondAsync(await RequestImage(args[0], user));
       } catch (ArgumentNullException e) {
         await msg.RespondAsync("Couldn't find a result for that");
       } catch {
@@ -37,7 +37,9 @@ namespace Commands {
       }
     }
 
-    public static async Task<string> RequestImage(string query) {
+    public static async Task<string> RequestImage(string query, User user) {
+      user.stats.Searched++;
+      
       ImageSearchRequest req = new ImageSearchRequest{
         Key = Program.GoogleAPIKey,
         SearchEngineId = Program.CseId,

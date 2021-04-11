@@ -20,7 +20,7 @@ namespace Commands {
       category = "Help";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
+    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
       if (args.Length == 0) {
         string prefixText = guild.prefix != "" ? $"or `{guild.prefix}`" : "";
         await msg.RespondAsync($@"

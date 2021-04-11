@@ -6,21 +6,13 @@ using DSharpPlus.Entities;
 
 namespace Commands {
   class Src : ICommand {
-    public string help {get;}
-    public string helpShort {get;}
-    public string[] signature {get;}
-    public TypoableString[] aliases {get;}
-    public string category {get;}
+    public string help {get;} = "Get a link to Botter's github repository";
+    public string helpShort {get;} = "Get a link to the source code";
+    public string[] signature {get;} = new string[] {};
+    public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("source", 1), new TypoableString("src", 0)};
+    public string category {get;} = "Advanced";
     public bool admin {get;} = false;
-    public Src() {
-      help = "Get a link to Botter's github repository";
-      helpShort = "Get a link to the source code";
-      signature = new string[] {};
-      aliases = new TypoableString[] {new TypoableString("source", 1), new TypoableString("src", 0)};
-      category = "Advanced";
-    }
-
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
+    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
       await msg.RespondAsync("https://github.com/Xendergo/Botter-rewrite");
     }
   }
