@@ -50,11 +50,20 @@ class Database {
     Guild ret;
     if (rows is null) {
       ret = new Guild(id, "", guildCache);
+      await createGuild(id);
     } else {
       ret = new Guild(ulong.Parse(rows[0]), rows[1], guildCache);
     }
 
     guildCache[id] = ret;
     return ret;
+  }
+
+  public static async Task setPrefix(ulong id, string prefix) {
+    await execCommand($"UPDATE guilds SET prefix = '{prefix}' WHERE id = '{id}'");
+  }
+
+  public static async Task createGuild(ulong id) {
+    await execCommand($"INSERT INTO guilds(id, prefix) VALUES ({id}, '')");
   }
 }

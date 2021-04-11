@@ -39,7 +39,14 @@ class CommandManager {
       string[] args = new string[text.Length - 2];
       Array.Copy(text, 2, args, 0, args.Length);
 
-      await commands[corrected].Exec(client, args, msg, guild);
+      ICommand command = commands[corrected];
+
+      if (command.admin && !(await messageArgs?.Guild?.GetMemberAsync(msg.Author.Id)).PermissionsIn(msg.Channel).HasPermission(Permissions.Administrator)) {
+        await msg.RespondAsync("You need admin permissions to run this command");
+        return;
+      }
+
+      await command.Exec(client, args, msg, guild);
     } catch (Exception e) {
       channel.Error(e, msg);
     }
@@ -56,10 +63,21 @@ class CommandManager {
   public static void AddCommands() {
     commandsSet.Add(new Help());
 
+    commandsSet.Add(new Prefix());
+
     commandsSet.Add(new Snipe());
     commandsSet.Add(new EditHistory());
     commandsSet.Add(new Shotgun());
 
+    commandsSet.Add(new Search());
+    commandsSet.Add(new SearchWithSetQuery("otter", "otter", 1));
+    commandsSet.Add(new SearchWithSetQuery("daughter", "ferret", 1));
+    commandsSet.Add(new SearchWithSetQuery("wife", "moth", 1));
+    commandsSet.Add(new SearchWithSetQuery("lämp", "lämp", 2));
+    commandsSet.Add(new SearchWithSetQuery("aunt", "bunny", 1));
+    commandsSet.Add(new SearchWithSetQuery("stepdaughter", "crow", 4));
+    commandsSet.Add(new SearchWithSetQuery("blender", "blender", 1));
+ 
     commandsSet.Add(new Src());
     commandsSet.Add(new Debug());
 

@@ -13,6 +13,7 @@ namespace Commands {
     public string[] signature {get;}
     public TypoableString[] aliases {get;}
     public string category {get;}
+    public bool admin {get;} = false;
     public EditHistory() {
       help = "Get previous versions of a message that was edited, edits are saved for at least 10 minutes, to find the id of a message, go to your user settings, go to `appearance`, then turn on developer mode. Then right click on the message and copy the id.";
       helpShort = "See how a message was edited";

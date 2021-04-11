@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 class Guild : Cacheable<ulong, Guild> {
   public string prefix;
   private Dictionary<ulong, Channel> channels;
@@ -11,6 +13,12 @@ class Guild : Cacheable<ulong, Guild> {
   public bool checkPrefix(string str) {
     base.resetKill();
     return (str == prefix || str == "botter") && str != "";
+  }
+
+  public async Task setPrefix(string str) {
+    this.prefix = str;
+
+    await Database.setPrefix(this.id, str);
   }
 
   // Channels don't contain any data that needs to be persisted, so I think this is reasonable

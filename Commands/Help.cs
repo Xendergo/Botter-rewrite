@@ -11,6 +11,7 @@ namespace Commands {
     public string[] signature {get;}
     public TypoableString[] aliases {get;}
     public string category {get;}
+    public bool admin {get;} = false;
     public Help() {
       help = "Get a list of all commands, or help for a specific one";
       helpShort = "Get help for a command";
@@ -21,7 +22,7 @@ namespace Commands {
 
     public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild) {
       if (args.Length == 0) {
-        string prefixText = guild.prefix != "" ? $"or {guild.prefix}" : "";
+        string prefixText = guild.prefix != "" ? $"or `{guild.prefix}`" : "";
         await msg.RespondAsync($@"
 For a prefix you can use `botter` {prefixText}
 

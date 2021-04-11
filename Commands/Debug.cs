@@ -12,6 +12,7 @@ namespace Commands {
     public string[] signature {get;}
     public TypoableString[] aliases {get;}
     public string category {get;}
+    public bool admin {get;} = false;
     public Debug() {
       help = "Get details about any exceptions that occured recently";
       helpShort = "Get info about recent errors";

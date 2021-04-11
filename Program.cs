@@ -8,16 +8,26 @@ namespace Botter_rewrite
 {
     class Program
     {
+        public static string GoogleAPIKey;
+        public static string CseId;
         static void Main(string[] args)
         {
             CommandManager.AddCommands();
             var config = new ConfigurationBuilder().AddJsonFile("C:/All items/projects/Botter rewrite/settings.json").Build();
+            GoogleAPIKey = config.GetConnectionString("googleAPIKey");
+            CseId = config.GetConnectionString("cseId");
             MainAsync(config.GetConnectionString(args[0])).GetAwaiter().GetResult();
         }
 
         static async Task MainAsync(string token) {
-            await Database.Connect();
-            
+            connect:
+
+            try {
+                await Database.Connect();
+            } catch {
+                goto connect;
+            }
+
             DiscordClient client = new DiscordClient(new DiscordConfiguration() {
                 Token = token,
                 TokenType = TokenType.Bot

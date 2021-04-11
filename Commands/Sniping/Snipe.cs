@@ -13,6 +13,7 @@ namespace Commands {
     public string[] signature {get;}
     public TypoableString[] aliases {get;}
     public string category {get;}
+    public bool admin {get;} = false;
     public Snipe() {
       help = "Snipe the most recently deleted message, deleted messages are saved for at least 10 minutes";
       helpShort = "Snipe a deleted message";

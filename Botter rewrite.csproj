@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="DSharpPlus" Version="4.0.0-rc2" />
+    <PackageReference Include="GoogleApi" Version="3.10.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Npgsql" Version="5.0.3" />
   </ItemGroup>

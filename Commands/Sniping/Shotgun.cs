@@ -11,6 +11,7 @@ namespace Commands {
     public string[] signature {get;}
     public TypoableString[] aliases {get;}
     public string category {get;}
+    public bool admin {get;} = false;
     public Shotgun() {
       help = "Snipe all the messages in a channel that are saved";
       helpShort = "Snipe all deleted messages";
