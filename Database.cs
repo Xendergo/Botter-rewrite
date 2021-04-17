@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 class Database {
   private static NpgsqlConnection conn;
-  private static Dictionary<ulong, Guild> guildCache = new Dictionary<ulong, Guild>();
+  public static Dictionary<ulong, Guild> guildCache = new Dictionary<ulong, Guild>();
   public static Dictionary<ulong, User> userCache = new Dictionary<ulong, User>();
 
   public static async Task Connect() {
@@ -29,7 +29,7 @@ class Database {
     doCommand:
     try {
       ret = await cmd.ExecuteReaderAsync();
-    } catch (NpgsqlOperationInProgressException e) {
+    } catch (Exception e) {
       await Task.Delay(100);
       goto doCommand;
     }
@@ -95,7 +95,10 @@ class Database {
         Died = 0,
         Searched = 0,
         Interactions = 0
-      });
+      },0,
+        0,
+        0,
+        0);
       await createUser(id);
     } else {
       ret = new User(ulong.Parse(rows[0]), new Stats() {
@@ -106,7 +109,10 @@ class Database {
         Died = int.Parse(rows[5]),
         Searched = int.Parse(rows[6]),
         Interactions = int.Parse(rows[7])
-      });
+      },int.Parse(rows[8]),
+        int.Parse(rows[9]),
+        int.Parse(rows[10]),
+        int.Parse(rows[11]));
     }
 
     userCache[id] = ret;

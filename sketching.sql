@@ -1,3 +1,4 @@
+-- @block
 CREATE TABLE users (
   id text,
   GotSniped integer DEFAULT 0,
@@ -8,3 +9,10 @@ CREATE TABLE users (
   Searched integer DEFAULT 0,
   Interactions integer DEFAULT 0
 )
+
+-- @block
+ALTER TABLE users
+ADD health integer DEFAULT 100
+
+-- @block
+SELECT * FROM users

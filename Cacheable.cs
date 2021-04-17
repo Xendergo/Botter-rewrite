@@ -11,7 +11,7 @@ public abstract class Cacheable<K, V>
     public Cacheable(K id, Dictionary<K, V> cache) {
         this.cache = cache;
         this.id = id;
-        timeToKill = DateTimeOffset.Now.ToUnixTimeMilliseconds() + 600000;
+        timeToKill = DateTimeOffset.Now.ToUnixTimeMilliseconds() + 60000;
         Kill();
     }
 
@@ -20,9 +20,15 @@ public abstract class Cacheable<K, V>
         while (now < timeToKill) {
             await Task.Delay((int)(timeToKill - now));
         }
+
+        onKill();
+
         cache.Remove(id);
     }
+
     public void resetKill() {
-        timeToKill = DateTimeOffset.Now.ToUnixTimeMilliseconds() + 600000;
+        timeToKill = DateTimeOffset.Now.ToUnixTimeMilliseconds() + 60000;
     }
+
+    protected virtual async void onKill() {}
 }

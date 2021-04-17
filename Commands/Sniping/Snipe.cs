@@ -44,7 +44,6 @@ namespace Commands {
       } else {
         User snipee = await Database.getUser(snipedMsg.AuthorID);
         snipee.stats.GotSniped++;
-        snipee.updateStats();
       }
 
       embed.WithColor(new DiscordColor(0xFF0000));

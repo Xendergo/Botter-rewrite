@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using System.Threading.Tasks;
 using DSharpPlus;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +34,12 @@ namespace Botter_rewrite
       await client.ConnectAsync();
 
       await Task.Delay(-1);
+    }
+
+    static void OnProcessExit() {
+      foreach (User user in Database.userCache.Values) {
+        user.updateData();
+      }
     }
   }
 }

@@ -52,8 +52,6 @@ class CommandManager {
       await command.Exec(client, args, msg, guild, user);
     } catch (Exception e) {
       channel.Error(e, msg);
-    } finally {
-      user.updateStats();
     }
   }
 
