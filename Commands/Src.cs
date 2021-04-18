@@ -12,7 +12,7 @@ namespace Commands {
     public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("source", 1), new TypoableString("src", 0)};
     public string category {get;} = "Advanced";
     public bool admin {get;} = false;
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
+    public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       await msg.RespondAsync("https://github.com/Xendergo/Botter-rewrite");
     }
   }

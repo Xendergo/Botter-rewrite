@@ -22,7 +22,7 @@ namespace Commands {
       category = "Sniping";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
+    public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       Channel channel = guild.getChannel(msg.ChannelId);
 
       if (channel.DeletedMessageStack.Last is null) {

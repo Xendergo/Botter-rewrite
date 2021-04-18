@@ -10,7 +10,7 @@ class Database {
   public static Dictionary<ulong, User> userCache = new Dictionary<ulong, User>();
 
   public static async Task Connect() {
-    Process.Start("C:/All items/projects/Botter rewrite/startDB.bat");
+    Process.Start("C:/All-items/projects/Botter rewrite/startDB.bat");
     string connstring = "Server=localhost;Port=5433;Username=postgres";
 
     tryConnect:

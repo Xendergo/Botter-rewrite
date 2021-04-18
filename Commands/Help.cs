@@ -20,8 +20,8 @@ namespace Commands {
       category = "Help";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
-      if (args.Length == 0) {
+    public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
+      if (args.strings.Count == 0) {
         string prefixText = guild.prefix != "" ? $"or `{guild.prefix}`" : "";
         await msg.RespondAsync($@"
 For a prefix you can use `botter` {prefixText}
@@ -32,10 +32,10 @@ Here's a list of commands:
 Bot written by Xendergo
         ");
       } else {
-        TypoableString corrected = TypoableString.FindClosestString(args[0], CommandManager.commands.Keys);
+        TypoableString corrected = TypoableString.FindClosestString(args.strings["command"], CommandManager.commands.Keys);
 
         if (corrected is null) {
-          await msg.RespondAsync($"There is no command with name `{args[0]}`");
+          await msg.RespondAsync($"There is no command with name `{args.strings["command"]}`");
           return;
         }
 

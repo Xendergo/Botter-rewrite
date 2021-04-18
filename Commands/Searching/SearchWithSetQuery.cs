@@ -23,7 +23,7 @@ namespace Commands {
       category = "Searching";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
+    public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       try {
         await msg.RespondAsync(await Search.RequestImage(query, user));
       } catch (ArgumentNullException e) {

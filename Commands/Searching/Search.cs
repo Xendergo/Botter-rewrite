@@ -27,9 +27,9 @@ namespace Commands {
       category = "Searching";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
+    public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       try {
-        await msg.RespondAsync(await RequestImage(args[0], user));
+        await msg.RespondAsync(await RequestImage(args.strings["query"], user));
       } catch (ArgumentNullException e) {
         await msg.RespondAsync("Couldn't find a result for that");
       } catch {

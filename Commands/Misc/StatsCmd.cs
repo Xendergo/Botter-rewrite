@@ -13,11 +13,11 @@ namespace Commands {
     public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("stats", 1), new TypoableString("statistics", 3)};
     public string category {get;} = "Misc";
     public bool admin {get;} = false;
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
-      if (args.Length == 0) {
-        await SendStats(msg, user, msg.Author.Username);
+    public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
+      if (args.users.ContainsKey("user")) {
+        await SendStats(msg, await Database.getUser(args.users["user"]), (await client.GetUserAsync(args.users["user"])).Username);
       } else {
-        await SendStats(msg, await Database.getUser(msg.MentionedUsers.First().Id), msg.MentionedUsers.First().Username);
+        await SendStats(msg, user, msg.Author.Username);
       }
     }
 

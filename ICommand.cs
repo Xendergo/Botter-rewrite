@@ -7,10 +7,11 @@ interface ICommand {
   public string helpShort {get;}
   // The arguments required for the command to execute
   // <string> @user <?optional>
+  // All optionals must come after all non-optionals
   public string[] signature {get;}
   // First alias is considered the main one
   public TypoableString[] aliases {get;}
   public string category {get;}
   public bool admin {get;}
-  public Task Exec(DiscordClient client, string[] args, DiscordMessage message, Guild guild, User user);
+  public Task Exec(DiscordClient client, Args args, DiscordMessage message, Guild guild, User user);
 }

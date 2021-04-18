@@ -22,15 +22,10 @@ namespace Commands {
       category = "Sniping";
     }
 
-    public async Task Exec(DiscordClient client, string[] args, DiscordMessage msg, Guild guild, User user) {
-      if (args.Length == 0) {
-        await msg.RespondAsync("You must provide a message ID");
-        return;
-      }
-
+    public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       ulong id;
       try {
-        id = ulong.Parse(args[0]);
+        id = ulong.Parse(args.strings["messageId"]);
       } catch {
         await msg.RespondAsync("The id must be an integer");
         return;

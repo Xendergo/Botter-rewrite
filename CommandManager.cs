@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Linq;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,15 @@ using DSharpPlus.Entities;
 using System.Threading.Tasks;
 using Commands;
 
+struct Args {
+  public Dictionary<string, string> strings;
+  public Dictionary<string, ulong> users;
+}
+
 class CommandManager {
+  private static Regex isStringType = new Regex("^<.+>$");
+  private static Regex isUserType = new Regex("^@");
+  private static Regex isPing = new Regex("^<@!.+>$");
   public static HashSet<ICommand> commandsSet = new HashSet<ICommand>();
   public static Dictionary<TypoableString, ICommand> commands = new Dictionary<TypoableString, ICommand>();
   public static async Task OnMessage(DiscordClient client, MessageCreateEventArgs messageArgs) {
@@ -49,7 +58,15 @@ class CommandManager {
         return;
       }
 
-      await command.Exec(client, args, msg, guild, user);
+      Args argsStruct;
+      try {
+        argsStruct = parseArgs(args, command.signature, client);
+      } catch (Exception e) {
+        await msg.RespondAsync(e.Message);
+        return;
+      }
+
+      await command.Exec(client, argsStruct, msg, guild, user);
     } catch (Exception e) {
       channel.Error(e, msg);
     }
@@ -87,5 +104,51 @@ class CommandManager {
     commandsSet.Add(new Debug());
 
     AddCommandsToDictionary();
+  }
+
+  public static Args parseArgs(string[] args, string[] sig, DiscordClient client) {
+    Args ret = new Args {
+      strings = new Dictionary<string, string>(),
+      users = new Dictionary<string, ulong>()
+    };
+
+    for (int i = 0; i < sig.Length; i++) {
+      if (i >= args.Length) {
+        if (sig[i].IndexOf("?") == -1) {
+          throw new Exception($"Required argument `{sig[i]}` is missing");
+        } else {
+          continue;
+        }
+      }
+
+      bool argIsPing = isPing.IsMatch(args[i]);
+
+      if (sig[i].StartsWith("@") && !argIsPing) {
+        throw new Exception($"The argument `{sig[i]}` is a user but a string was provided (did you ping them?)");
+      }
+
+      if (sig[i].StartsWith("<") && argIsPing) {
+        throw new Exception($"The argument `{sig[i]}` must be a string, not a user");
+      }
+
+      string argName;
+      if (argIsPing) {
+        argName = sig[i].Substring(1);
+      } else {
+        argName = sig[i].Substring(1, sig[i].Length - 2);
+      }
+
+      if (argName.StartsWith("?")) {
+        argName = argName.Substring(1);
+      }
+
+      if (argIsPing) {
+        ret.users[argName] = ulong.Parse(args[i].Substring(3, args[i].Length - 4));
+      } else {
+        ret.strings[argName] = args[i];
+      }
+    }
+
+    return ret;
   }
 }
