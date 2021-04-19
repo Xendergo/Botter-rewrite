@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DSharpPlus.Entities;
+using DSharpPlus;
+using Botter_rewrite;
 public struct Stats {
   public int GotSniped;
   public int PeopleSniped;
@@ -17,6 +20,8 @@ public class User : Cacheable<ulong, User> {
   public int electricity;
   public int magic;
   public int coins;
+  public Battle battle = null;
+  public Task<string> username;
   public User(ulong id, Stats stats, int coins, int magic, int electricity, int health) : base(id, Database.userCache) {
     this.id = id;
     this.stats = stats;
@@ -24,6 +29,7 @@ public class User : Cacheable<ulong, User> {
     this.electricity = electricity;
     this.magic = magic;
     this.coins = coins;
+    username = getUsername();
   }
 
   public async Task updateData() {
@@ -31,6 +37,19 @@ public class User : Cacheable<ulong, User> {
   }
 
   protected override async void onKill() {
+    if (battle is not null) {
+      battle.players.Remove(this);
+      await battle.MostRecentChannel.SendMessageAsync($"{await username} left the battle due to inactivity");
+    }
+
     await updateData();
+  }
+
+  public async Task<DiscordUser> getUser() {
+    return await Program.client.GetUserAsync(id);
+  }
+
+  private async Task<string> getUsername() {
+    return (await getUser()).Username;
   }
 }

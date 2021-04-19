@@ -99,6 +99,9 @@ class CommandManager {
     commandsSet.Add(new SearchWithSetQuery("blender", "blender", 1));
 
     commandsSet.Add(new StatsCmd());
+
+    commandsSet.Add(new Inv());
+    commandsSet.Add(new BattleRequest());
  
     commandsSet.Add(new Src());
     commandsSet.Add(new Debug());

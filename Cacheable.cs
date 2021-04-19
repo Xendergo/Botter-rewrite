@@ -19,6 +19,7 @@ public abstract class Cacheable<K, V>
         long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         while (now < timeToKill) {
             await Task.Delay((int)(timeToKill - now));
+            now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         onKill();

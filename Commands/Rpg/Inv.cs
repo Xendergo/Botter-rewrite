@@ -13,7 +13,27 @@ namespace Commands {
     public string category {get;} = "Game";
     public bool admin {get;} = false;
     public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
-      await msg.RespondAsync("https://github.com/Xendergo/Botter-rewrite");
+      if (args.users.ContainsKey("player")) {
+        SendInv(msg, await Database.getUser(args.users["player"]), (await client.GetUserAsync(args.users["player"])).Username);
+      } else {
+        SendInv(msg, user, msg.Author.Username);
+      }
+    }
+
+    public static async void SendInv(DiscordMessage msg, User user, string username) {
+      string healthBar = new string('▨', (int)(user.health / 100.0 * 17)).PadRight(17, '▢');
+      await msg.RespondAsync($@"```
+  {username}'s inventory
+
+       Health - {user.health}
++--------------------------+
+|{healthBar}|
++--------------------------+
+
+Coins - {user.coins}
+Electricity generation - {user.electricity}kw
+Magic - {user.magic}
+```");
     }
   }
 }

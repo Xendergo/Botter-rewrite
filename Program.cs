@@ -10,6 +10,7 @@ namespace Botter_rewrite
   {
     public static string GoogleAPIKey;
     public static string CseId;
+    public static DiscordClient client;
     static void Main(string[] args)
     {
       CommandManager.AddCommands();
@@ -18,19 +19,22 @@ namespace Botter_rewrite
       CseId = config.GetConnectionString("cseId");
       MainAsync(config.GetConnectionString(args[0])).GetAwaiter().GetResult();
     }
+
     static async Task MainAsync(string token) {
       await Database.Connect();
 
-      DiscordClient client = new DiscordClient(new DiscordConfiguration() {
+      DiscordClient nonStaticClient = new DiscordClient(new DiscordConfiguration() {
           Token = token,
           TokenType = TokenType.Bot
       });
 
-      client.MessageCreated += CommandManager.OnMessage;
-      client.MessageDeleted += Snipe.MessageDelete;
-      client.MessageUpdated += EditHistory.OnEdit;
+      client = nonStaticClient;
 
-      await client.ConnectAsync();
+      nonStaticClient.MessageCreated += CommandManager.OnMessage;
+      nonStaticClient.MessageDeleted += Snipe.MessageDelete;
+      nonStaticClient.MessageUpdated += EditHistory.OnEdit;
+
+      await nonStaticClient.ConnectAsync();
 
       await Task.Delay(-1);
     }
