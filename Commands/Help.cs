@@ -49,7 +49,7 @@ Bot written by Xendergo
       }
     }
 
-    private string GenerateCommandList() {
+    private static string GenerateCommandList() {
       List<string> commands = new List<string>();
 
       string pCategory = "";

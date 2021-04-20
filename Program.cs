@@ -25,7 +25,7 @@ namespace Botter_rewrite
     static async Task MainAsync(string token) {
       await Database.Connect();
 
-      DiscordClient nonStaticClient = new DiscordClient(new DiscordConfiguration() {
+      DiscordClient nonStaticClient = new DiscordClient(new DiscordConfiguration {
           Token = token,
           TokenType = TokenType.Bot
       });

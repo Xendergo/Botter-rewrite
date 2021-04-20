@@ -1,3 +1,5 @@
 [*.cs]
 dotnet_diagnostic.CC0105.severity = none
 dotnet_diagnostic.CC0001.severity = none
+dotnet_diagnostic.CC0003.severity = none
+dotnet_diagnostic.HAA0601.severity = none

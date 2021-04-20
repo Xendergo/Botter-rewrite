@@ -35,7 +35,7 @@ namespace Commands {
       await request.CreateReactionAsync(DiscordEmoji.FromName(client, ":white_check_mark:"));
     }
 
-    private async void connectBattles(User user1, ulong user2id, DiscordChannel channel) {
+    private static async void connectBattles(User user1, ulong user2id, DiscordChannel channel) {
       User user2 = await Database.getUser(user2id);
 
       if (user1.battle is null) user1.battle = new Battle(channel, user1);

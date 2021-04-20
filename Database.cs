@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Botter_rewrite;
 
-class Database {
+static class Database {
   private static NpgsqlConnection conn;
   public static Dictionary<ulong, Guild> guildCache = new Dictionary<ulong, Guild>();
   public static Dictionary<ulong, User> userCache = new Dictionary<ulong, User>();
@@ -88,7 +88,7 @@ class Database {
 
     User ret;
     if (rows is null) {
-      ret = new User(id, new Stats() {
+      ret = new User(id, new Stats {
         GotSniped = 0,
         PeopleSniped = 0,
         PeopleKilled = 0,
@@ -102,7 +102,7 @@ class Database {
         0);
       await createUser(id);
     } else {
-      ret = new User(ulong.Parse(rows[0]), new Stats() {
+      ret = new User(ulong.Parse(rows[0]), new Stats {
         GotSniped = int.Parse(rows[1]),
         PeopleSniped = int.Parse(rows[2]),
         PeopleKilled = int.Parse(rows[3]),
