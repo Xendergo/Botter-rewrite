@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Npgsql;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Botter_rewrite;
 
 class Database {
   private static NpgsqlConnection conn;
@@ -10,7 +11,7 @@ class Database {
   public static Dictionary<ulong, User> userCache = new Dictionary<ulong, User>();
 
   public static async Task Connect() {
-    Process.Start("C:/All-items/projects/Botter rewrite/startDB.bat");
+    Process.Start(Program.dataPath + "/startDB.bat");
     string connstring = "Server=localhost;Port=5433;Username=postgres";
 
     tryConnect:

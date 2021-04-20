@@ -6,15 +6,17 @@ using Commands;
 
 namespace Botter_rewrite
 {
-  class Program
+  static class Program
   {
     public static string GoogleAPIKey;
     public static string CseId;
     public static DiscordClient client;
+    public static string dataPath;
     static void Main(string[] args)
     {
+      dataPath = args[1];
       CommandManager.AddCommands();
-      var config = new ConfigurationBuilder().AddJsonFile("C:/All-items/projects/Botter rewrite/settings.json").Build();
+      var config = new ConfigurationBuilder().AddJsonFile(dataPath + "/settings.json").Build();
       GoogleAPIKey = config.GetConnectionString("googleAPIKey");
       CseId = config.GetConnectionString("cseId");
       MainAsync(config.GetConnectionString(args[0])).GetAwaiter().GetResult();

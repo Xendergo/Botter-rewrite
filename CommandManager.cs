@@ -62,7 +62,7 @@ class CommandManager {
       try {
         argsStruct = parseArgs(args, command.signature, client);
       } catch (Exception e) {
-        await msg.RespondAsync(e.Message);
+        await msg.RespondAsync(e.Message + $", type `botter help {corrected}` for extra help");
         return;
       }
 
