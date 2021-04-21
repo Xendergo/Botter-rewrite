@@ -16,6 +16,7 @@ namespace Botter_rewrite
     {
       dataPath = args[1];
       CommandManager.AddCommands();
+      ItemRegistry.RegisterItems();
       var config = new ConfigurationBuilder().AddJsonFile(dataPath + "/settings.json").Build();
       GoogleAPIKey = config.GetConnectionString("googleAPIKey");
       CseId = config.GetConnectionString("cseId");

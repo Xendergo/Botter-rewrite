@@ -4,6 +4,8 @@ using Npgsql;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Botter_rewrite;
+using Items;
+using Newtonsoft.Json.Linq;
 
 static class Database {
   private static NpgsqlConnection conn;
@@ -30,6 +32,8 @@ static class Database {
     doCommand:
     try {
       ret = await cmd.ExecuteReaderAsync();
+    } catch (PostgresException e) {
+      throw new Exception(e.Message);
     } catch (Exception e) {
       await Task.Delay(100);
       goto doCommand;
@@ -116,7 +120,29 @@ static class Database {
         int.Parse(rows[11]));
     }
 
+    ret.items = await getItems(id);
+
     userCache[id] = ret;
+    return ret;
+  }
+
+  private static async Task<HashSet<IItem>> getItems(ulong id) {
+    NpgsqlDataReader reader = await execCommand($"SELECT * FROM items WHERE id = '{id}'");
+
+    HashSet<IItem> ret = new HashSet<IItem>();
+
+    while (await reader.ReadAsync()) {
+      long itemId = reader.GetInt64(0);
+      string name = reader.GetString(2);
+      string data = reader.GetString(3);
+
+      IItem item = (IItem) Activator.CreateInstance(ItemRegistry.items[new TypoableString(name, 0)].clazz);
+      item.Deserialize(JObject.Parse(data));
+
+      ret.Add(item);
+    }
+
+    reader.Close();
     return ret;
   }
 
@@ -124,7 +150,8 @@ static class Database {
     (await execCommand($"UPDATE guilds SET prefix = '{prefix}' WHERE id = '{id}'")).Dispose();
   }
 
-  public static async Task updateStats(ulong id, Stats stats) {
+  public static async Task updateUser(User user) {
+    Stats stats = user.stats;
     (await execCommand($@"UPDATE users SET
 gotsniped = '{stats.GotSniped}',
 peoplesniped = '{stats.PeopleSniped}',
@@ -132,8 +159,29 @@ peoplekilled = '{stats.PeopleKilled}',
 selfsniped = '{stats.SelfSniped}',
 died = '{stats.Died}',
 searched = '{stats.Searched}',
-interactions = '{stats.Interactions}'
-WHERE id = '{id}'")).Dispose();
+interactions = '{stats.Interactions}',
+coins = {user.coins},
+magic = {user.magic},
+electricity = {user.electricity},
+health = {user.health}
+WHERE id = '{user.id}'")).Dispose();
+
+    foreach (IItem item in user.items) {
+      await saveItem(item, user.id);
+    }
+  }
+
+  public static async Task saveItem(IItem item, ulong userId) {
+    if (item.id.HasValue) {
+      (await execCommand($@"UPDATE items SET
+data = '{item.Serialize().ToString()}',
+WHERE itemid = {item.id.Value}")).Dispose();
+    } else {
+      (await execCommand($@"INSERT INTO items(id, name, data) VALUES (
+'{userId}',
+'{item.name}',
+'{item.Serialize().ToString()}')")).Dispose();
+    }
   }
 
   public static async Task createGuild(ulong id) {

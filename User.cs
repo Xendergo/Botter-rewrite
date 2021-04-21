@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DSharpPlus.Entities;
 using DSharpPlus;
 using Botter_rewrite;
+using Items;
 public struct Stats {
   public int GotSniped;
   public int PeopleSniped;
@@ -22,6 +23,7 @@ public class User : Cacheable<ulong, User> {
   public int coins;
   public Battle battle = null;
   public Task<string> username;
+  public HashSet<IItem> items = new HashSet<IItem>();
   public User(ulong id, Stats stats, int coins, int magic, int electricity, int health) : base(id, Database.userCache) {
     this.id = id;
     this.stats = stats;
@@ -33,7 +35,7 @@ public class User : Cacheable<ulong, User> {
   }
 
   public async Task updateData() {
-    await Database.updateStats(id, stats);
+    await Database.updateUser(this);
   }
 
   protected override async void onKill() {

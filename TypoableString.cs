@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System;
-class TypoableString {
+public class TypoableString {
   public string value;
   public int maxErrors;
 

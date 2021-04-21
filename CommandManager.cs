@@ -13,7 +13,7 @@ struct Args {
   public Dictionary<string, ulong> users;
 }
 
-class CommandManager {
+static class CommandManager {
   private static Regex isStringType = new Regex("^<.+>$");
   private static Regex isUserType = new Regex("^@");
   private static Regex isPing = new Regex("^<@!.+>$");

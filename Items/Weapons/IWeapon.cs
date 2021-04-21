@@ -1,5 +1,5 @@
 namespace Items {
-  interface IWeapon : IDegradable {
+  public abstract class IWeapon : IDegradable {
     public void Attack(User target) {
       
     }
