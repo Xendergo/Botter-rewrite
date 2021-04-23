@@ -1,7 +1,5 @@
 namespace Items {
   public abstract class IWeapon : IDegradable {
-    public void Attack(User target) {
-      
-    }
+    public abstract void Attack(User target);
   }
 }

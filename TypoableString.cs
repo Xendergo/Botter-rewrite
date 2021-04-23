@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System;
-public class TypoableString {
+public class TypoableString : IEquatable<TypoableString> {
   public string value;
   public int maxErrors;
 
@@ -9,12 +9,25 @@ public class TypoableString {
     this.maxErrors = maxErrors;
   }
 
+  public bool Equals(TypoableString other) {
+    if (other is null) return false;
+
+    return other.value == value;
+  }
+
+  public override bool Equals(object obj)
+  {
+    if (obj is not TypoableString) return false;
+
+    return ((TypoableString) obj).value.Equals(value);
+  }
+
   // Allow for use in dictionaries
-  public override int GetHashCode() {
+  override public int GetHashCode() {
     return value.GetHashCode();
   }
 
-  public override string ToString() {
+  override public string ToString() {
     return value;
   }
 
@@ -57,4 +70,22 @@ public class TypoableString {
 
     return grid[a.Length, b.Length];
   }
+}
+
+public class Employee : IEquatable<Employee>
+{
+    public string Account;
+    public string Name;
+
+    public Employee(string account, string name)
+    {
+        this.Account = account;
+        this.Name = name;
+    }
+
+    public bool Equals(Employee other)
+    {
+        if (other == null) return false;
+        return (this.Account.Equals(other.Account));
+    }
 }

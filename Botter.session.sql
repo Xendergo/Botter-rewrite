@@ -5,4 +5,6 @@ CREATE TABLE items (
   data JSON NOT NULL
 )
 -- @block
-SELECT * FROM users
+SELECT * FROM items
+-- @block
+UPDATE items SET name = 'golden-sword' WHERE itemid = 1

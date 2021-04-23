@@ -5,8 +5,9 @@ using DSharpPlus.Entities;
 using Items;
 
 public struct ItemEntry {
-  public TypoableString name;
+  public string name;
   public int price;
+  public string category;
   public string description;
   public string shortDescription;
   public Type clazz;
@@ -29,13 +30,23 @@ public static class ItemRegistry {
       return;
     }
 
-    user.coins -= entry.price;
-    user.items.Add((IItem)Activator.CreateInstance(entry.clazz));
+    IItem item = (IItem)Activator.CreateInstance(entry.clazz);
+    item.id = new Microsoft.CodeAnalysis.Optional<long>();
+    item.owner = user;
+    user.TransferCoins(-entry.price);
+    user.items.Add(item);
 
     await msg.RespondAsync($"You now have another **{itemName}** and **{user.coins} coins**");
   }
 
   public static void RegisterItems() {
-    
+    items.Add(new TypoableString("golden-sword", 2), new ItemEntry {
+      name = "Golden-sword",
+      price = 25,
+      category = "Weapons",
+      description = "Deal 10 damage, breaks after 15 uses",
+      shortDescription = "Deals a lot of damage, breaks quickly",
+      clazz = typeof(GoldenSword)
+    });
   }
 }

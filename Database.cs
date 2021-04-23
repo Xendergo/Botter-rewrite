@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Botter_rewrite;
 using Items;
 using Newtonsoft.Json.Linq;
+using Microsoft.CodeAnalysis;
 
 static class Database {
   private static NpgsqlConnection conn;
@@ -29,14 +30,10 @@ static class Database {
     NpgsqlCommand cmd = new NpgsqlCommand(req, conn);
 
     NpgsqlDataReader ret;
-    doCommand:
     try {
       ret = await cmd.ExecuteReaderAsync();
     } catch (PostgresException e) {
       throw new Exception(e.Message);
-    } catch (Exception e) {
-      await Task.Delay(100);
-      goto doCommand;
     }
 
     cmd.Dispose();
@@ -53,11 +50,11 @@ static class Database {
         values.Add(reader.GetValue(i).ToString());
       }
     } catch {
-      reader.Close();
+      reader.Dispose();
       return null;
     }
 
-    reader.Close();
+    reader.Dispose();
 
     return values;
   }
@@ -120,30 +117,30 @@ static class Database {
         int.Parse(rows[11]));
     }
 
-    ret.items = await getItems(id);
+    ret.items = await getItems(id, ret);
 
     userCache[id] = ret;
     return ret;
   }
 
-  private static async Task<HashSet<IItem>> getItems(ulong id) {
-    NpgsqlDataReader reader = await execCommand($"SELECT * FROM items WHERE id = '{id}'");
+  private static async Task<List<IItem>> getItems(ulong id, User user) {
+    using (NpgsqlDataReader reader = await execCommand($"SELECT * FROM items WHERE id = '{id}'")) {
+      List<IItem> ret = new List<IItem>();
 
-    HashSet<IItem> ret = new HashSet<IItem>();
+      while (await reader.ReadAsync()) {
+        long itemId = reader.GetInt64(0);
+        string name = reader.GetString(2);
+        string data = reader.GetString(3);
 
-    while (await reader.ReadAsync()) {
-      long itemId = reader.GetInt64(0);
-      string name = reader.GetString(2);
-      string data = reader.GetString(3);
+        IItem item = (IItem) Activator.CreateInstance(ItemRegistry.items[new TypoableString(name, 0)].clazz);
+        item.Deserialize(JObject.Parse(data));
+        item.id = new Optional<long>(itemId);
+        item.owner = user;
 
-      IItem item = (IItem) Activator.CreateInstance(ItemRegistry.items[new TypoableString(name, 0)].clazz);
-      item.Deserialize(JObject.Parse(data));
-
-      ret.Add(item);
+        ret.Add(item);
+      }
+      return ret;
     }
-
-    reader.Close();
-    return ret;
   }
 
   public static async Task setPrefix(ulong id, string prefix) {
@@ -174,21 +171,29 @@ WHERE id = '{user.id}'")).Dispose();
   public static async Task saveItem(IItem item, ulong userId) {
     if (item.id.HasValue) {
       (await execCommand($@"UPDATE items SET
-data = '{item.Serialize().ToString()}',
-WHERE itemid = {item.id.Value}")).Dispose();
+data = '{item.Serialize().ToString()}'
+WHERE itemId = {item.id.Value}")).Dispose();
     } else {
-      (await execCommand($@"INSERT INTO items(id, name, data) VALUES (
+      NpgsqlDataReader reader = await execCommand($@"INSERT INTO items(id, name, data) VALUES (
 '{userId}',
 '{item.name}',
-'{item.Serialize().ToString()}')")).Dispose();
+'{item.Serialize().ToString()}')
+RETURNING itemId");
+      await reader.ReadAsync();
+      item.id = reader.GetInt64(0);
+      reader.Dispose();
     }
   }
 
+  public static async Task deleteItem(long id) {
+    (await execCommand($"DELETE FROM items WHERE itemId = {id}")).Close();
+  }
+
   public static async Task createGuild(ulong id) {
-    (await execCommand($"INSERT INTO guilds(id, prefix) VALUES ({id}, '')")).Dispose();
+    (await execCommand($"INSERT INTO guilds(id, prefix) VALUES ({id}, '')")).Close();
   }
 
   public static async Task createUser(ulong id) {
-    (await execCommand($"INSERT INTO users(id) VALUES ({id})")).Dispose();
+    (await execCommand($"INSERT INTO users(id) VALUES ({id})")).Close();
   }
 }

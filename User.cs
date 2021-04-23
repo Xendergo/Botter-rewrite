@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
@@ -20,10 +21,10 @@ public class User : Cacheable<ulong, User> {
   public int health;
   public int electricity;
   public int magic;
-  public int coins;
+  public int coins {get; protected set;}
   public Battle battle = null;
   public Task<string> username;
-  public HashSet<IItem> items = new HashSet<IItem>();
+  public List<IItem> items = new List<IItem>();
   public User(ulong id, Stats stats, int coins, int magic, int electricity, int health) : base(id, Database.userCache) {
     this.id = id;
     this.stats = stats;
@@ -32,6 +33,15 @@ public class User : Cacheable<ulong, User> {
     this.magic = magic;
     this.coins = coins;
     username = getUsername();
+  }
+
+  public void TransferCoins(int amt) {
+    coins += amt;
+
+    // Sales tax dependent on wealth
+    // Equasion where c is coins * 0.001 & p is amt
+    // (e ^ c / 2 ^ c - 1) * sqrt(|p|)
+    coins -= (int)MathF.Truncate(MathF.Min(coins, MathF.Abs(amt) * ((MathF.Pow(MathF.E, coins * 0.0001F) / MathF.Pow(2F, coins * 0.0001F)) - 1)));
   }
 
   public async Task updateData() {

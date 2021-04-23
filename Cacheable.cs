@@ -8,7 +8,7 @@ public abstract class Cacheable<K, V>
     public K id;
     private long timeToKill;
 
-    public Cacheable(K id, Dictionary<K, V> cache) {
+    protected Cacheable(K id, Dictionary<K, V> cache) {
         this.cache = cache;
         this.id = id;
         timeToKill = DateTimeOffset.Now.ToUnixTimeMilliseconds() + 60000;

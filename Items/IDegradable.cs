@@ -8,7 +8,7 @@ namespace Items {
       damage = (int)obj["damage"];
     }
 
-    public override JObject Serialize() {
+    override public JObject Serialize() {
       JObject ret = new JObject();
       ret["damage"] = damage;
       return ret;
