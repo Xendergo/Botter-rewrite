@@ -14,6 +14,7 @@ namespace Items {
         await Database.deleteItem(id.Value);
       }
     }
+    public abstract string Display();
     public abstract JObject Serialize();
     public abstract void Deserialize(JObject str);
   }

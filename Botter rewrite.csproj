@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Botter_rewrite</RootNamespace>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +16,11 @@
     <PackageReference Include="DSharpPlus" Version="4.0.0-rc2" />
     <PackageReference Include="GoogleApi" Version="3.10.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="newtonsoft.json" Version="13.0.1" />
     <PackageReference Include="Npgsql" Version="5.0.3" />
+    <PackageReference Include="nunit" Version="3.13.1" />
+    <PackageReference Include="NUNIT3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Roslynator.Analyzers" Version="3.1.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

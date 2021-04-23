@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using Microsoft.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace Items {
   // public abstract class 
@@ -7,31 +8,37 @@ namespace Items {
     override public string name {get;} = "Stonk";
     public float priceBought;
     public float coinAmt;
+    public string ticker;
     
     override public JObject Serialize() {
       JObject ret = new JObject();
       ret["priceBought"] = priceBought;
       ret["coinAmt"] = coinAmt;
+      ret["ticker"] = ticker;
       return ret;
     }
 
     override public void Deserialize(JObject obj) {
       priceBought = (float)obj["priceBought"];
       coinAmt = (float)obj["coinAmt"];
+      ticker = (string)obj["ticker"];
     }
 
-    public void buyStock(User user, int coins) {
-      float stockPrice = getPriceOfStock();
+    public async Task buyStock(User user, int coins) {
+      float stockPrice = await getPriceOfStock();
+      user.TransferCoins(-coins);
+    }
+
+    public async Task sellStock(User user, int coins) {
+      float stockPrice = await getPriceOfStock();
       user.TransferCoins(coins);
     }
 
-    public void sellStock(User user, int coins) {
-      float stockPrice = getPriceOfStock();
-      user.TransferCoins(coins);
+    private async Task<float> getPriceOfStock() {
+      return await Util.fetchStockData(ticker);
     }
-
-    private float getPriceOfStock() {
-      return (float) 1.0;
+    override public string Display() {
+      return $"**{ticker}** - invested **{coinAmt} coins** while price was **${priceBought}**";
     }
   }
 }

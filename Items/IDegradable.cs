@@ -13,5 +13,8 @@ namespace Items {
       ret["damage"] = damage;
       return ret;
     }
+    override public string Display() {
+      return $"{damage} damage";
+    }
   }
 }

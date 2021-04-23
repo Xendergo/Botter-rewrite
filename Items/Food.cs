@@ -19,8 +19,11 @@ namespace Items {
       return new JObject();
     }
 
-    public override void Deserialize(JObject str) {
+    override public void Deserialize(JObject str) {
       return;
+    }
+    override public string Display() {
+      return "";
     }
   }
 }

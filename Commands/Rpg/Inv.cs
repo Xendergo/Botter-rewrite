@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using Items;
 
 namespace Commands {
   class Inv : ICommand {
@@ -33,7 +34,35 @@ namespace Commands {
 Coins - {user.coins}
 Electricity generation - {user.electricity}kw
 Magic - {user.magic}
+
+Items
+{GenerateItemList(user)}
 ```");
+    }
+
+    private static string GenerateItemList(User user) {
+      List<string> itemString = new List<string>();
+      List<int> quantity = new List<int>();
+
+      foreach (IItem item in user.items) {
+        string display = item.Display();
+        string str = item.name + (display == "" ? "" : " - " + display);
+
+        if (itemString.Contains(str)) {
+          quantity[itemString.IndexOf(str)]++;
+          continue;
+        }
+
+        itemString.Add(str);
+        quantity.Add(1);
+      }
+
+      List<string> ret = new List<string>();
+      for (int i = 0; i < itemString.Count; i++) {
+        ret.Add($"x{quantity[i]} | {itemString[i]}");
+      }
+
+      return string.Join("\n", ret);
     }
   }
 }
