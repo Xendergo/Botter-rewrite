@@ -132,7 +132,8 @@ static class Database {
         string name = reader.GetString(2);
         string data = reader.GetString(3);
 
-        IItem item = (IItem) Activator.CreateInstance(ItemRegistry.items[new TypoableString(name, 0)].clazz);
+        ItemEntry itemEntry = ItemRegistry.items[new TypoableString(name, 0)];
+        IItem item = (IItem) Activator.CreateInstance(itemEntry.clazz, itemEntry.constructorArgs);
         item.Deserialize(JObject.Parse(data));
         item.id = new Optional<long>(itemId);
         item.owner = user;

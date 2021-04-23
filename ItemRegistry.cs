@@ -10,6 +10,7 @@ public struct ItemEntry {
   public string category;
   public string description;
   public string shortDescription;
+  public object[] constructorArgs;
   public Type clazz;
 }
 
@@ -30,7 +31,7 @@ public static class ItemRegistry {
       return;
     }
 
-    IItem item = (IItem)Activator.CreateInstance(entry.clazz);
+    IItem item = (IItem)Activator.CreateInstance(entry.clazz, entry.constructorArgs);
     item.id = new Microsoft.CodeAnalysis.Optional<long>();
     item.owner = user;
     user.TransferCoins(-entry.price);
@@ -46,7 +47,18 @@ public static class ItemRegistry {
       category = "Weapons",
       description = "Deal 10 damage, breaks after 15 uses",
       shortDescription = "Deals a lot of damage, breaks quickly",
-      clazz = typeof(GoldenSword)
+      clazz = typeof(GoldenSword),
+      constructorArgs = null
+    });
+
+    items.Add(new TypoableString("potato", 1), new ItemEntry {
+      name = "potato",
+      price = 2,
+      category = "Food",
+      description = "Heal 2 health when used, also used as ammo for potato cannon",
+      shortDescription = "Heal 2 health when used, also used as ammo for potato cannon",
+      clazz = typeof(Food),
+      constructorArgs = new Object[] {"potato", 2}
     });
   }
 }

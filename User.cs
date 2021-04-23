@@ -18,7 +18,16 @@ public struct Stats {
 public class User : Cacheable<ulong, User> {
   /// <summary>The user's statistics, mutations are automatically saved when the command is done executing</summary>
   public Stats stats;
-  public int health;
+  private int _health;
+  public int health {
+    get {
+      return _health;
+    }
+
+    set {
+      _health = Math.Clamp(value, 0, 100);
+    }
+  }
   public int electricity;
   public int magic;
   public int coins {get; protected set;}

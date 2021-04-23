@@ -29,7 +29,7 @@ For a prefix you can use `botter` {prefixText}
 Here's a list of commands:
 {GenerateCommandList()}
 
-Bot written by Xendergo
+Bot written by Xendergo & Matgenius04
         ");
       } else {
         TypoableString corrected = TypoableString.FindClosestString(args.strings["command"], CommandManager.commands.Keys);

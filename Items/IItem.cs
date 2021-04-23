@@ -1,16 +1,17 @@
 using Newtonsoft.Json.Linq;
 using Microsoft.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace Items {
   public abstract class IItem {
     public Optional<long> id;
     public abstract string name {get;}
     public User owner;
-    protected void removeSelf() {
+    protected async Task removeSelf() {
       owner.items.Remove(this);
 
       if (id.HasValue) {
-        Database.deleteItem(id.Value);
+        await Database.deleteItem(id.Value);
       }
     }
     public abstract JObject Serialize();
