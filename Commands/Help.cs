@@ -34,6 +34,7 @@ Bot written by Xendergo & Matgenius04
 Argument signature help:
 `<value>` any string value
 `@person` any discord user, must ping them
+`#amt` any integer
 `enum:buy|sell` one of the values given (in this case `buy` or `sell`)
 `?` means the argument is optional
         ");

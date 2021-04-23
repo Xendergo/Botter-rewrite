@@ -12,6 +12,7 @@ struct Args {
   public Dictionary<string, string> strings;
   public Dictionary<string, ulong> users;
   public Dictionary<string, string> enums;
+  public Dictionary<string, long> nums;
 }
 
 static class CommandManager {
@@ -118,7 +119,8 @@ static class CommandManager {
     Args ret = new Args {
       strings = new Dictionary<string, string>(),
       users = new Dictionary<string, ulong>(),
-      enums = new Dictionary<string, string>()
+      enums = new Dictionary<string, string>(),
+      nums = new Dictionary<string, long>()
     };
 
     for (int i = 0; i < sig.Length; i++) {
@@ -132,6 +134,7 @@ static class CommandManager {
 
       bool argIsPing = isPing.IsMatch(args[i]);
       bool sigIsEnum = sig[i].IndexOf(':') != -1;
+      bool sigIsNum = sig[i].StartsWith("#");
 
       if (sig[i].StartsWith("@") && !argIsPing) {
         throw new Exception($"The argument `{sig[i]}` is a user but a string was provided (did you ping them?)");
@@ -140,9 +143,13 @@ static class CommandManager {
       if ((sig[i].StartsWith("<") || sigIsEnum) && argIsPing) {
         throw new Exception($"The argument `{sig[i]}` must be a string, not a user");
       }
+      
+      if (sigIsNum && argIsPing) {
+        throw new Exception($"The argument `{sig[i]}` must be a number, not a user");
+      }
 
       string argName;
-      if (argIsPing) {
+      if (argIsPing || sigIsNum) {
         argName = sig[i].Substring(1);
       } else if (sigIsEnum) {
         argName = new string(sig[i].TakeWhile(v => v != ':').ToArray());
@@ -164,6 +171,12 @@ static class CommandManager {
         }
 
         ret.enums[argName] = args[i];
+      } else if (sigIsNum) {
+        try {
+          ret.nums[argName] = long.Parse(args[i]);
+        } catch {
+          throw new Exception($"The argument {args[i]} must be an integer (is it too big to parse?)");
+        }
       } else {
         ret.strings[argName] = args[i];
       }
