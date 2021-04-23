@@ -11,6 +11,7 @@ using Commands;
 struct Args {
   public Dictionary<string, string> strings;
   public Dictionary<string, ulong> users;
+  public Dictionary<string, string> enums;
 }
 
 static class CommandManager {
@@ -60,7 +61,7 @@ static class CommandManager {
 
       Args argsStruct;
       try {
-        argsStruct = parseArgs(args, command.signature, client);
+        argsStruct = parseArgs(args, command.signature);
       } catch (Exception e) {
         await msg.RespondAsync(e.Message + $", type `botter help {corrected}` for extra help");
         return;
@@ -113,10 +114,11 @@ static class CommandManager {
     AddCommandsToDictionary();
   }
 
-  public static Args parseArgs(string[] args, string[] sig, DiscordClient client) {
+  public static Args parseArgs(string[] args, string[] sig) {
     Args ret = new Args {
       strings = new Dictionary<string, string>(),
-      users = new Dictionary<string, ulong>()
+      users = new Dictionary<string, ulong>(),
+      enums = new Dictionary<string, string>()
     };
 
     for (int i = 0; i < sig.Length; i++) {
@@ -129,18 +131,21 @@ static class CommandManager {
       }
 
       bool argIsPing = isPing.IsMatch(args[i]);
+      bool sigIsEnum = sig[i].IndexOf(':') != -1;
 
       if (sig[i].StartsWith("@") && !argIsPing) {
         throw new Exception($"The argument `{sig[i]}` is a user but a string was provided (did you ping them?)");
       }
 
-      if (sig[i].StartsWith("<") && argIsPing) {
+      if ((sig[i].StartsWith("<") || sigIsEnum) && argIsPing) {
         throw new Exception($"The argument `{sig[i]}` must be a string, not a user");
       }
 
       string argName;
       if (argIsPing) {
         argName = sig[i].Substring(1);
+      } else if (sigIsEnum) {
+        argName = new string(sig[i].TakeWhile(v => v != ':').ToArray());
       } else {
         argName = sig[i].Substring(1, sig[i].Length - 2);
       }
@@ -151,6 +156,14 @@ static class CommandManager {
 
       if (argIsPing) {
         ret.users[argName] = ulong.Parse(args[i].Substring(3, args[i].Length - 4));
+      } else if (sigIsEnum) {
+        string[] options = sig[i].Substring(sig[i].IndexOf(":") + 1).Split('|');
+
+        if (!options.Contains(args[i])) {
+          throw new Exception($"Argument {args[i]} must be one of {string.Join(", ", options)}");
+        }
+
+        ret.enums[argName] = args[i];
       } else {
         ret.strings[argName] = args[i];
       }

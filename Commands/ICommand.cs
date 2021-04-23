@@ -6,7 +6,7 @@ interface ICommand {
   public string help {get;}
   public string helpShort {get;}
   // The arguments required for the command to execute
-  // <string> @user <?optional>
+  // <string> @user enum:option1|option2 <?optional>
   // All optionals must come after all non-optionals
   public string[] signature {get;}
   // First alias is considered the main one
