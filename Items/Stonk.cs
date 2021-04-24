@@ -29,20 +29,26 @@ namespace Items {
     public async Task buyStock(User user, int coins) {
       priceBought = await getPriceOfStock();
       user.TransferCoins(-coins);
+      coinAmt = coins;
+      user.items.Add(this);
     }
 
-    public async Task sellStock(User user, int coins) {
-      priceBought = await getPriceOfStock();
-      user.TransferCoins(coins);
+    public async Task<int> sellStock() {
+      float currentPrice = await getPriceOfStock();
+      int sellPrice = (int)(coinAmt * (currentPrice / priceBought));
+      owner.TransferCoins(sellPrice);
+      await removeSelf();
+      return sellPrice;
     }
 
     private async Task<float> getPriceOfStock() {
       float v = await Util.fetchStockData(ticker);
-      if (v == -1) throw new CommandException("That ticker doesn't exist");
+      if (v == -1) throw new CommandException("There was an error getting the price of that stock (does that ticker exist?)");
       return v;
     }
+
     override public string Display() {
-      return $"**{ticker}** - invested **{coinAmt} coins** while price was **${priceBought}**";
+      return $"{ticker} - invested {coinAmt} coins while price was ${priceBought}";
     }
   }
 }
