@@ -12,6 +12,9 @@ namespace Items {
     public Stonk(string ticker) {
       this.ticker = ticker;
     }
+
+    public Stonk() {}
+
     override public JObject Serialize() {
       JObject ret = new JObject();
       ret["priceBought"] = priceBought;

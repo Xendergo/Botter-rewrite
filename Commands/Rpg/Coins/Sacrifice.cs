@@ -10,7 +10,7 @@ namespace Commands {
     public string helpShort {get;} = "Sacrifice health to get coins";
     public string[] signature {get;} = new string[] {"<amt>"};
     public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("sacrifice", 3)};
-    public string category {get;} = "Advanced";
+    public string category {get;} = "Rpg";
     public bool admin {get;} = false;
     public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       int amt;

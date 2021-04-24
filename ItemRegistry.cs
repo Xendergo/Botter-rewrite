@@ -10,12 +10,17 @@ public struct ItemEntry {
   public string category;
   public string description;
   public string shortDescription;
+  public ItemClassData classData;
+}
+
+public struct ItemClassData {
   public object[] constructorArgs;
   public Type clazz;
 }
 
 public static class ItemRegistry {
   public static Dictionary<TypoableString, ItemEntry> items = new Dictionary<TypoableString, ItemEntry>();
+  public static Dictionary<string, ItemClassData> notForSaleItems = new Dictionary<string, ItemClassData>();
   public static async Task BuyItem(string name, DiscordMessage msg, User user) {
     TypoableString itemName = TypoableString.FindClosestString(name, items.Keys);
 
@@ -31,7 +36,7 @@ public static class ItemRegistry {
       return;
     }
 
-    IItem item = (IItem)Activator.CreateInstance(entry.clazz, entry.constructorArgs);
+    IItem item = (IItem)Activator.CreateInstance(entry.classData.clazz, entry.classData.constructorArgs);
     item.id = new Microsoft.CodeAnalysis.Optional<long>();
     item.owner = user;
     user.TransferCoins(-entry.price);
@@ -47,8 +52,10 @@ public static class ItemRegistry {
       category = "Weapons",
       description = "Deal 10 damage, breaks after 15 uses",
       shortDescription = "Deals a lot of damage, breaks quickly",
-      clazz = typeof(GoldenSword),
-      constructorArgs = null
+      classData = new ItemClassData {
+        clazz = typeof(GoldenSword),
+        constructorArgs = null
+      }
     });
 
     items.Add(new TypoableString("potato", 1), new ItemEntry {
@@ -57,8 +64,15 @@ public static class ItemRegistry {
       category = "Food",
       description = "Heal 2 health when used, also used as ammo for potato cannon",
       shortDescription = "Heal 2 health when used, also used as ammo for potato cannon",
-      clazz = typeof(Food),
-      constructorArgs = new Object[] {"potato", 2}
+      classData = new ItemClassData {
+        clazz = typeof(Food),
+        constructorArgs = new Object[] {"potato", 2}
+      }
+    });
+
+    notForSaleItems.Add("Stonk", new ItemClassData {
+      constructorArgs = new Object[] {},
+      clazz = typeof(Stonk)
     });
   }
 }

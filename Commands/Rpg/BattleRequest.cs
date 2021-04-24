@@ -11,7 +11,7 @@ namespace Commands {
     public string helpShort {get;} = "Start a fight with someone";
     public string[] signature {get;} = new string[] {"@player"};
     public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("battlerequest", 3), new TypoableString("fightrequest", 3), new TypoableString("requestfight", 3), new TypoableString("requestbattle", 3)};
-    public string category {get;} = "Game";
+    public string category {get;} = "Rpg";
     public bool admin {get;} = false;
     public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       ulong otherId = args.users["player"];

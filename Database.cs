@@ -132,7 +132,14 @@ static class Database {
         string name = reader.GetString(2);
         string data = reader.GetString(3);
 
-        ItemEntry itemEntry = ItemRegistry.items[new TypoableString(name, 0)];
+        ItemClassData itemEntry;
+        
+        if (ItemRegistry.items.ContainsKey(new TypoableString(name, 0))) {
+          itemEntry = ItemRegistry.items[new TypoableString(name, 0)].classData;
+        } else {
+          itemEntry = ItemRegistry.notForSaleItems[name];
+        }
+
         IItem item = (IItem) Activator.CreateInstance(itemEntry.clazz, itemEntry.constructorArgs);
         item.Deserialize(JObject.Parse(data));
         item.id = new Optional<long>(itemId);

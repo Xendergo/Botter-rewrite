@@ -47,11 +47,18 @@ public class User : Cacheable<ulong, User> {
 
   public void TransferCoins(int amt) {
     coins += amt;
+    coins -= calcTax(amt);
+  }
 
+  public int calcTax(int amt) {
+    return calcTax(amt, coins);
+  }
+  public static int calcTax(int amt, int wealth) {
     // Sales tax dependent on wealth
-    // Equasion where c is coins * 0.001 & p is amt
-    // (e ^ c / 2 ^ c - 1) * sqrt(|p|)
-    coins -= (int)MathF.Truncate(MathF.Min(coins, MathF.Abs(amt) * ((MathF.Pow(MathF.E, coins * 0.0001F) / MathF.Pow(2F, coins * 0.0001F)) - 1)));
+    // Equasion where c is wealth & p is amt
+    // (1.3 ^ (c / 1000) - 1) * sqrt(|p|)
+
+    return (int)MathF.Truncate(MathF.Min(wealth, MathF.Abs(amt) * (MathF.Pow(1.3F, wealth * 0.0001F) - 1)));
   }
 
   public async Task updateData() {

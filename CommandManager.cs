@@ -108,6 +108,7 @@ static class CommandManager {
 
     commandsSet.Add(new Sacrifice());
     commandsSet.Add(new Stonks());
+    commandsSet.Add(new CalcTax());
     commandsSet.Add(new Inv());
     commandsSet.Add(new BattleRequest());
     commandsSet.Add(new Menu());

@@ -11,7 +11,7 @@ namespace Commands {
     public string helpShort {get;} = "See your inventory & game data";
     public string[] signature {get;} = new string[] {"@?player"};
     public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("inv", 0), new TypoableString("inventory", 2)};
-    public string category {get;} = "Game";
+    public string category {get;} = "Rpg";
     public bool admin {get;} = false;
     public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       if (args.users.ContainsKey("player")) {
