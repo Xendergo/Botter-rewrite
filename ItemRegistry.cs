@@ -70,6 +70,18 @@ public static class ItemRegistry {
       }
     });
 
+    items.Add(new TypoableString("bond", 1), new ItemEntry {
+      name = "bond",
+      price = 10,
+      category = "Coins",
+      description = "Lend out money, you get 1 coin in interest for every day you wait to sell this item",
+      shortDescription = "Lend out money and get back more in interest",
+      classData = new ItemClassData {
+        clazz = typeof(Bond),
+        constructorArgs = new Object[] {}
+      }
+    });
+
     notForSaleItems.Add("Stonk", new ItemClassData {
       constructorArgs = new Object[] {},
       clazz = typeof(Stonk)

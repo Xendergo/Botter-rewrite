@@ -113,6 +113,7 @@ static class CommandManager {
     commandsSet.Add(new BattleRequest());
     commandsSet.Add(new Menu());
     commandsSet.Add(new Buy());
+    commandsSet.Add(new Sell());
     commandsSet.Add(new Use());
  
     commandsSet.Add(new Src());
