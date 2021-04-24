@@ -53,6 +53,7 @@ public class User : Cacheable<ulong, User> {
   public int calcTax(int amt) {
     return calcTax(amt, coins);
   }
+  
   public static int calcTax(int amt, int wealth) {
     // Sales tax dependent on wealth
     // Equasion where c is wealth & p is amt

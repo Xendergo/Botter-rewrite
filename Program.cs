@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DSharpPlus;
+using DSharpPlus.Entities;
 using Microsoft.Extensions.Configuration;
 using Commands;
 
@@ -12,8 +13,7 @@ namespace Botter_rewrite
     public static string CseId;
     public static DiscordClient client;
     public static string dataPath;
-    static void Main(string[] args)
-    {
+    static void Main(string[] args) {
       dataPath = args[1];
       CommandManager.AddCommands();
       ItemRegistry.RegisterItems();
@@ -39,7 +39,19 @@ namespace Botter_rewrite
 
       await nonStaticClient.ConnectAsync();
 
+      SetStatus();
+
       await Task.Delay(-1);
+    }
+
+    static async void SetStatus() {
+      await Task.Delay(5000); // For some reason it says I'm not authenticated if I don't wait
+
+      while (true) {
+        await client.UpdateStatusAsync(new DiscordActivity($"{await Database.countUsers()} botters in {await Database.countGuilds()} holts", ActivityType.Watching));
+
+        await Task.Delay(600000);
+      }
     }
 
     static void OnProcessExit() {

@@ -204,4 +204,18 @@ RETURNING itemId");
   public static async Task createUser(ulong id) {
     (await execCommand($"INSERT INTO users(id) VALUES ({id})")).Close();
   }
+
+  public static async Task<int> countUsers() {
+    using (NpgsqlDataReader reader = await execCommand("SELECT COUNT(*) FROM users")) {
+      await reader.ReadAsync();
+      return reader.GetInt32(0);
+    }
+  }
+
+  public static async Task<int> countGuilds() {
+    using (NpgsqlDataReader reader = await execCommand("SELECT COUNT(*) FROM guilds")) {
+      await reader.ReadAsync();
+      return reader.GetInt32(0);
+    }
+  }
 }
