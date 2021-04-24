@@ -35,13 +35,12 @@ public static class Util {
     string baseUrl = $"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}";
     try {
       JObject res = (JObject)(await fetch(baseUrl))["chart"];
-      if (res["error"] is null) return -1;
+      if (res["error"].Type != JTokenType.Null) return -1;
       return (float) (((res["result"] as JArray)[0] as JObject)["meta"] as JObject)["regularMarketPrice"];
     } catch (Exception exception) {
       Console.WriteLine("Something went wrong with the parsing of stock data");
       Console.WriteLine("~~~~~~~~~~~~~");
-      Console.WriteLine(exception);
-      return -1;
+      throw exception;
     }
   }
 }

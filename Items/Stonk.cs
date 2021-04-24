@@ -1,5 +1,4 @@
 using Newtonsoft.Json.Linq;
-using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Items {
@@ -10,6 +9,9 @@ namespace Items {
     public float coinAmt;
     public string ticker;
     
+    public Stonk(string ticker) {
+      this.ticker = ticker;
+    }
     override public JObject Serialize() {
       JObject ret = new JObject();
       ret["priceBought"] = priceBought;
@@ -25,17 +27,19 @@ namespace Items {
     }
 
     public async Task buyStock(User user, int coins) {
-      float stockPrice = await getPriceOfStock();
+      priceBought = await getPriceOfStock();
       user.TransferCoins(-coins);
     }
 
     public async Task sellStock(User user, int coins) {
-      float stockPrice = await getPriceOfStock();
+      priceBought = await getPriceOfStock();
       user.TransferCoins(coins);
     }
 
     private async Task<float> getPriceOfStock() {
-      return await Util.fetchStockData(ticker);
+      float v = await Util.fetchStockData(ticker);
+      if (v == -1) throw new CommandException("That ticker doesn't exist");
+      return v;
     }
     override public string Display() {
       return $"**{ticker}** - invested **{coinAmt} coins** while price was **${priceBought}**";

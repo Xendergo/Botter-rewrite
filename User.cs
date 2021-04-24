@@ -16,7 +16,8 @@ public struct Stats {
 }
 
 public class User : Cacheable<ulong, User> {
-  /// <summary>The user's statistics, mutations are automatically saved when the command is done executing</summary>
+  /// <summary>The user's statistics, mutations are automatically saved when the player is removed form cache
+  /// (with the exception of removing items from the player, unless you use the item's `removeSelf` method)</summary>
   public Stats stats;
   private int _health;
   public int health {

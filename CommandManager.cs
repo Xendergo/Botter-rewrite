@@ -68,7 +68,11 @@ static class CommandManager {
         return;
       }
 
-      await command.Exec(client, argsStruct, msg, guild, user);
+      try {
+        await command.Exec(client, argsStruct, msg, guild, user);
+      } catch (CommandException e) {
+        await msg.RespondAsync(e.Message);
+      }
     } catch (Exception e) {
       channel.Error(e, msg);
     }
