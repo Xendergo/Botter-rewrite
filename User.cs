@@ -5,6 +5,8 @@ using DSharpPlus.Entities;
 using DSharpPlus;
 using Botter_rewrite;
 using Items;
+using StatusEffects;
+
 public struct Stats {
   public int GotSniped;
   public int PeopleSniped;
@@ -15,7 +17,7 @@ public struct Stats {
   public int Interactions;
 }
 
-public class User : Cacheable<ulong, User> {
+public sealed class User : Cacheable<ulong, User> {
   /// <summary>The user's statistics, mutations are automatically saved when the player is removed form cache
   /// (with the exception of removing items from the player, unless you use the item's `removeSelf` method)</summary>
   public Stats stats;
@@ -31,10 +33,12 @@ public class User : Cacheable<ulong, User> {
   }
   public int electricity;
   public int magic;
-  public int coins {get; protected set;}
+  public int coins {get; private set;}
   public Battle battle = null;
   public Task<string> username;
   public List<IItem> items = new List<IItem>();
+  public List<IStatusEffect> effects = new List<IStatusEffect>();
+  private bool isTicking = false;
   public User(ulong id, Stats stats, int coins, int magic, int electricity, int health) : base(id, Database.userCache) {
     this.id = id;
     this.stats = stats;
@@ -48,6 +52,10 @@ public class User : Cacheable<ulong, User> {
   public void TransferCoins(int amt) {
     coins += amt;
     coins -= calcTax(amt);
+  }
+  public void AddStatusEffect(IStatusEffect effect) {
+    effects.Add(effect);
+    if (!isTicking) TickEffects();
   }
 
   public int calcTax(int amt) {
@@ -91,11 +99,47 @@ public class User : Cacheable<ulong, User> {
     throw new CommandException($"You don't have a {itemName.value}");
   }
 
+  public void Tick() {
+    if (effects.Count > 0) {
+      resetKill();
+
+      foreach (IStatusEffect effect in effects) {
+        effect.tick();
+      }
+    }
+  }
+
+  public Optional<T> GetEffect<T>() where T : IStatusEffect {
+    float maxIntensity = 0;
+    T ret = null;
+
+    foreach (IStatusEffect effect in effects) {
+      if (effect is T && effect.intensity > maxIntensity) {
+        ret = effect as T;
+        maxIntensity = effect.intensity;
+      }
+    }
+
+    return ret;
+  }
+
   public async Task<DiscordUser> getUser() {
     return await Program.client.GetUserAsync(id);
   }
 
   private async Task<string> getUsername() {
     return (await getUser()).Username;
+  }
+
+  private async void TickEffects() {
+    isTicking = true;
+    while (effects.Count > 0) {
+      foreach (IStatusEffect effect in effects) {
+        effect.tick();
+      }
+
+      await Task.Delay(1000);
+    }
+    isTicking = false;
   }
 }

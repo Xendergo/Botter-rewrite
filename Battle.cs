@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DSharpPlus.Entities;
 using System;
+
 public class Battle {
   public HashSet<User> players = new HashSet<User>();
   private Dictionary<ulong, Dictionary<ulong, int>> distances = new Dictionary<ulong, Dictionary<ulong, int>>();
