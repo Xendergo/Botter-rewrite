@@ -75,6 +75,22 @@ public class User : Cacheable<ulong, User> {
     await updateData();
   }
 
+  public IItem GetItem(string name) {
+    TypoableString itemName = TypoableString.FindClosestString(name, ItemRegistry.items.Keys);
+
+    if (itemName is null) {
+      throw new CommandException($"There is no item named *{name}*");
+    }
+
+    foreach (IItem item in items) {
+      if (item.name == itemName.value) {
+        return item;
+      }
+    }
+
+    throw new CommandException($"You don't have a {itemName.value}");
+  }
+
   public async Task<DiscordUser> getUser() {
     return await Program.client.GetUserAsync(id);
   }

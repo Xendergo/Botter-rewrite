@@ -12,8 +12,8 @@ public class Battle {
   }
 
   public int getDistance(User player1, User player2) {
-    if (!players.Contains(player1)) throw new Exception("Can't get distance between these players, one of them isn't in the battle");
-    if (!players.Contains(player2)) throw new Exception("Can't get distance between these players, one of them isn't in the battle");
+    if (!players.Contains(player1)) throw new CommandException("Can't get distance between these players, one of them isn't in the battle");
+    if (!players.Contains(player2)) throw new CommandException("Can't get distance between these players, one of them isn't in the battle");
 
     ulong[] ids;
     if (player1.id > player2.id) {

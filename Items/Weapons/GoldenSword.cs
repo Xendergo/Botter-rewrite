@@ -1,9 +1,14 @@
+using System.Threading.Tasks;
+using DSharpPlus.Entities;
+using System.Threading.Tasks;
+
 namespace Items {
-  public class GoldenSword : IWeapon {
+  public class GoldenSword : IMelee {
     override public string name {get;} = "golden-sword";
     public override int maxDamage {get;} = 15;
-    override public void Attack(User target) {
-      throw new System.NotImplementedException();
+    public override int damageToDeal {get;} = 15;
+    override protected async Task<string> DoAttack(User target, DiscordMessage msg) {
+      return "";
     }
   }
 }

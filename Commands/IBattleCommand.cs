@@ -10,7 +10,7 @@ abstract class IBattleCommand : ICommand {
   // If the command involves doing something to another player, the other player must be called `target` in the signature
   public abstract string[] signature {get;}
   public abstract TypoableString[] aliases {get;}
-  public string category {get;} = "Rpg";
+  public string category {get;} = "Battle";
   public bool admin {get;} = false;
   public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
     if (user.battle is null) {
