@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using Items;
+using StatusEffects;
 
 namespace Commands {
   class Stab : IBattleCommand {
@@ -20,11 +21,22 @@ namespace Commands {
 
       User target = await Database.getUser(args.users["target"]);
 
-      int damage = weapon.damageToDeal;
+      float illnessIntensity;
+
+      Optional<Illness> illness = user.GetEffect<Illness>();
+
+      if (illness.HasValue) {
+        illnessIntensity = illness.Value.intensity;
+      } else {
+        illnessIntensity = 0;
+      }
+
+      int damage = (int)(weapon.damageToDeal * (1 - illnessIntensity));
+
       target.health -= damage;
       string message = await weapon.Attack(await Database.getUser(args.users["target"]), msg);
 
-      await msg.RespondAsync($"Oof, **{await user.username}** stabbed **{await target.username}** with a **{weapon.name}**, dealing **{damage}hp**, leaving them with **{target.health}hp**");
+      await msg.RespondAsync($"Oof, **{await user.username}** stabbed **{await target.username}** with a **{weapon.name}**, dealing **{damage}hp**, leaving them with **{target.health}hp**" + (message == "" ? "" : " - " + message));
     }
   }
 }

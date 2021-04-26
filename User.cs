@@ -54,7 +54,10 @@ public sealed class User : Cacheable<ulong, User> {
     coins -= calcTax(amt);
   }
   public void AddStatusEffect(IStatusEffect effect) {
-    effects.Add(effect);
+    lock (effects) {
+      effects.Add(effect);
+    }
+
     if (!isTicking) TickEffects();
   }
 
@@ -99,23 +102,13 @@ public sealed class User : Cacheable<ulong, User> {
     throw new CommandException($"You don't have a {itemName.value}");
   }
 
-  public void Tick() {
-    if (effects.Count > 0) {
-      resetKill();
-
-      foreach (IStatusEffect effect in effects) {
-        effect.tick();
-      }
-    }
-  }
-
   public Optional<T> GetEffect<T>() where T : IStatusEffect {
     float maxIntensity = 0;
-    T ret = null;
+    Optional<T> ret = new Optional<T>();
 
     foreach (IStatusEffect effect in effects) {
       if (effect is T && effect.intensity > maxIntensity) {
-        ret = effect as T;
+        ret = new Optional<T>(effect as T);
         maxIntensity = effect.intensity;
       }
     }
@@ -134,8 +127,10 @@ public sealed class User : Cacheable<ulong, User> {
   private async void TickEffects() {
     isTicking = true;
     while (effects.Count > 0) {
-      foreach (IStatusEffect effect in effects) {
-        effect.tick();
+      lock (effects) {
+        for (int i = effects.Count - 1; i >= 0; i--) {
+          effects[i].tick();
+        }
       }
 
       await Task.Delay(1000);
