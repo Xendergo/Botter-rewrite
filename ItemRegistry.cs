@@ -58,11 +58,11 @@ public static class ItemRegistry {
       }
     });
 
-    items.Add(new TypoableString("petrified-poop-sword", 2), new ItemEntry {
+    items.Add(new TypoableString("petrified-poop-sword", 4), new ItemEntry {
       name = "petrified-poop-sword",
       price = 40,
       category = "Weapons",
-      description = "Deal 1 damage, but give the illness effect for 30 seconds",
+      description = "Deal 1 damage, but give the illness effect for 30 seconds, breaks after 25 uses",
       shortDescription = "Give your target an illness",
       classData = new ItemClassData {
         clazz = typeof(PetrifiedPoopSword),

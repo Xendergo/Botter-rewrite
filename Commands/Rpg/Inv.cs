@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using Items;
+using StatusEffects;
 
 namespace Commands {
   class Inv : ICommand {
@@ -35,6 +36,9 @@ Coins - {user.coins}
 Electricity generation - {user.electricity}kw
 Magic - {user.magic}
 
+Effects
+{GenerateEffectsList(user)}
+
 Items
 {GenerateItemList(user)}
 ```");
@@ -63,6 +67,16 @@ Items
       }
 
       return string.Join("\n", ret);
+    }
+
+    private static string GenerateEffectsList(User user) {
+      List<string> ret = new List<string>();
+
+      foreach (IStatusEffect effect in user.effects) {
+        ret.Add($"{effect.name} - intensity: {effect.intensity} - seconds left: {effect.ticksLeft}");
+      }
+
+      return string.Join('\n', ret);
     }
   }
 }

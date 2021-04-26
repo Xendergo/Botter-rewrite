@@ -115,6 +115,7 @@ static class CommandManager {
     commandsSet.Add(new Buy());
     commandsSet.Add(new Sell());
     commandsSet.Add(new Use());
+    commandsSet.Add(new Effects());
 
     commandsSet.Add(new Dist());
     commandsSet.Add(new LeaveBattle());
