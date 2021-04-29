@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using DSharpPlus.Entities;
 using System;
@@ -10,6 +11,17 @@ public class Battle {
   public Battle(DiscordChannel channel, User firstPlayer) {
     MostRecentChannel = channel;
     players.Add(firstPlayer);
+    tickPlayers();
+  }
+
+  private async void tickPlayers() {
+    while (players.Count > 0) {
+      foreach (User user in players) {
+        user.BattleTick();
+      }
+
+      await Task.Delay(1000);
+    }
   }
 
   public int getDistance(User player1, User player2) {
@@ -50,8 +62,11 @@ public class Battle {
   }
 
   public void mergeBattle(Battle otherBattle) {
+    if (object.ReferenceEquals(this, otherBattle)) return;
+
     foreach (User player in otherBattle.players) {
       players.Add(player);
+      player.battle.players.Remove(player);
       player.battle = this;
     }
 

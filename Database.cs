@@ -99,7 +99,6 @@ static class Database {
         Interactions = 0
       },0,
         0,
-        0,
         0);
       await createUser(id);
     } else {
@@ -113,8 +112,7 @@ static class Database {
         Interactions = int.Parse(rows[7])
       },int.Parse(rows[8]),
         int.Parse(rows[9]),
-        int.Parse(rows[10]),
-        int.Parse(rows[11]));
+        int.Parse(rows[10]));
     }
 
     ret.items = await getItems(id, ret);
@@ -167,7 +165,6 @@ searched = '{stats.Searched}',
 interactions = '{stats.Interactions}',
 coins = {user.coins},
 magic = {user.magic},
-electricity = {user.electricity},
 health = {user.health}
 WHERE id = '{user.id}'")).Dispose();
 

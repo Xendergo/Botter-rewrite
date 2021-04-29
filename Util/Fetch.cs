@@ -26,8 +26,7 @@ public static class Util {
     } catch (Exception exception) {
       Console.WriteLine("Ooooooof, the fetch request failed");
       Console.WriteLine("~~~~~~~~~~~~~");
-      throw exception;
-      // You can't just return nothing here
+      throw exception; // it's throwing (figuratively)
     }
   }
 

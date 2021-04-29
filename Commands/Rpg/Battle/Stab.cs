@@ -21,6 +21,10 @@ namespace Commands {
 
       User target = await Database.getUser(args.users["target"]);
 
+      if (battle.getDistance(user, target) > 5) {
+        throw new CommandException("You must be at most 5 units apart to use melee weapons");
+      }
+
       float illnessIntensity;
 
       Optional<Illness> illness = user.GetEffect<Illness>();
@@ -34,7 +38,7 @@ namespace Commands {
       int damage = (int)(weapon.damageToDeal * (1 - illnessIntensity));
 
       target.health -= damage;
-      string message = await weapon.Attack(await Database.getUser(args.users["target"]), msg);
+      string message = await weapon.Attack(await Database.getUser(args.users["target"]), user, msg);
 
       await msg.RespondAsync($"Oof, **{await user.username}** stabbed **{await target.username}** with a **{weapon.name}**, dealing **{damage}hp**, leaving them with **{target.health}hp**" + (message == "" ? "" : " - " + message));
     }

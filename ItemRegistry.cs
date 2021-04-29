@@ -70,6 +70,18 @@ public static class ItemRegistry {
       }
     });
 
+    items.Add(new TypoableString("taser", 1), new ItemEntry {
+      name = "taser",
+      price = 40,
+      category = "Weapons",
+      description = "Deal 0 damage, but give your opponent stun, but also give your stun as you hold the taser to them. Consumes 2kw. Effects last 10 seconds",
+      shortDescription = "Tase your target",
+      classData = new ItemClassData {
+        clazz = typeof(Taser),
+        constructorArgs = null
+      }
+    });
+
     items.Add(new TypoableString("potato", 1), new ItemEntry {
       name = "potato",
       price = 2,
@@ -90,6 +102,18 @@ public static class ItemRegistry {
       shortDescription = "Lend out money and get back more in interest",
       classData = new ItemClassData {
         clazz = typeof(Bond),
+        constructorArgs = new Object[] {}
+      }
+    });
+
+    items.Add(new TypoableString("solar-panel", 2), new ItemEntry {
+      name = "solar-panel",
+      price = 10,
+      category = "Electricity",
+      description = "Generate 10kw for 10 minutes",
+      shortDescription = "Generate 10kw for 10 minutes",
+      classData = new ItemClassData {
+        clazz = typeof(SolarPanel),
         constructorArgs = new Object[] {}
       }
     });

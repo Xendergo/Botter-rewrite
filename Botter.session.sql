@@ -8,3 +8,5 @@ CREATE TABLE items (
 SELECT * FROM items
 -- @block
 UPDATE items SET name = 'golden-sword' WHERE itemid = 1
+--@block
+ALTER TABLE users DROP COLUMN electricity

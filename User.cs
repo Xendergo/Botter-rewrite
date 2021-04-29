@@ -31,19 +31,18 @@ public sealed class User : Cacheable<ulong, User> {
       _health = Math.Clamp(value, 0, 100);
     }
   }
-  public int electricity;
   public int magic;
   public int coins {get; private set;}
   public Battle battle = null;
   public Task<string> username;
   public List<IItem> items = new List<IItem>();
   public List<IStatusEffect> effects = new List<IStatusEffect>();
+  public List<ElectricityConsumer> consumers = new List<ElectricityConsumer>();
   private bool isTicking = false;
-  public User(ulong id, Stats stats, int coins, int magic, int electricity, int health) : base(id, Database.userCache) {
+  public User(ulong id, Stats stats, int coins, int magic, int health) : base(id, Database.userCache) {
     this.id = id;
     this.stats = stats;
     this.health = health;
-    this.electricity = electricity;
     this.magic = magic;
     this.coins = coins;
     username = getUsername();
@@ -53,7 +52,9 @@ public sealed class User : Cacheable<ulong, User> {
     coins += amt;
     coins -= calcTax(amt);
   }
-  public void AddStatusEffect(IStatusEffect effect) {
+
+  // NEVER CALL - Always use IStatusEffect.AddStatusEffect
+  public void AddStatusEffectOnlytoBeUsedByIStatusEffect(IStatusEffect effect) {
     lock (effects) {
       effects.Add(effect);
     }
@@ -122,6 +123,56 @@ public sealed class User : Cacheable<ulong, User> {
 
   private async Task<string> getUsername() {
     return (await getUser()).Username;
+  }
+
+  public int CalculatePower() {
+    int total = 0;
+    foreach (IItem item in items) {
+      if (item is IPowerGen) {
+        total += (item as IPowerGen).CalculatePower();
+      }
+    }
+
+    return total;
+  }
+
+  public void BattleTick() {
+    int itemIndex = items.Count;
+    int spareElectricity = 0;
+
+    for (int i = consumers.Count - 1; i >= 0; i--) {
+      ElectricityConsumer consumer = consumers[i];
+
+      int consumed = consumer.electricityConsumption(consumer);
+
+      while (spareElectricity < consumed) {
+        itemIndex--;
+
+        if (itemIndex == -1) {
+          if (consumer.OutOfPower is not null) {
+            consumer.OutOfPower(consumer);
+          }
+          consumer.hasPower = false;
+
+          goto nextConsumer;
+        }
+
+        if (items[itemIndex] is IPowerGen) {
+          spareElectricity += (items[itemIndex] as IPowerGen).GeneratePower();
+        }
+      }
+
+      spareElectricity -= consumed;
+      if (!consumer.hasPower) {
+        consumer.hasPower = true;
+        
+        if (consumer.HasPowerAgain is not null) {
+          consumer.HasPowerAgain(consumer);
+        }
+      }
+
+      nextConsumer:;
+    }
   }
 
   private async void TickEffects() {

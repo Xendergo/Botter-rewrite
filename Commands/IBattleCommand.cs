@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using StatusEffects;
 
 abstract class IBattleCommand : ICommand {
   public abstract string help {get;}
@@ -25,6 +26,10 @@ abstract class IBattleCommand : ICommand {
         await msg.RespondAsync($"You must be in the same battle to use this command, to invite them to your battle, run `botter battlerequest @{user.username}`");
         return;
       }
+    }
+
+    if (user.GetEffect<Stun>().HasValue) {
+      throw new CommandException("You're stunned, you can't use a battle command");
     }
 
     await Exec(client, args, msg, guild, user, user.battle);

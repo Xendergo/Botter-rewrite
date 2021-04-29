@@ -33,7 +33,7 @@ namespace Commands {
 +--------------------------+
 
 Coins - {user.coins}
-Electricity generation - {user.electricity}kw
+Electricity generation capacity - {user.CalculatePower()}kw
 Magic - {user.magic}
 
 Effects
