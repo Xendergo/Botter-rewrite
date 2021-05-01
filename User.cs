@@ -137,6 +137,8 @@ public sealed class User : Cacheable<ulong, User> {
   }
 
   public void BattleTick() {
+    resetKill();
+    
     int itemIndex = items.Count;
     int spareElectricity = 0;
 
@@ -183,6 +185,8 @@ public sealed class User : Cacheable<ulong, User> {
           effects[i].tick();
         }
       }
+
+      resetKill();
 
       await Task.Delay(1000);
     }

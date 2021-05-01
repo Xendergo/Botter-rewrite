@@ -118,6 +118,30 @@ public static class ItemRegistry {
       }
     });
 
+    items.Add(new TypoableString("bandaid", 1), new ItemEntry {
+      name = "bandaid",
+      price = 3,
+      category = "Health",
+      description = "Give youself regen for 10 minutes when used, you'll ultimately regen 6 health after the 10 minutes",
+      shortDescription = "Regen a bit of health when used",
+      classData = new ItemClassData {
+        clazz = typeof(Bandaid),
+        constructorArgs = new object[] {}
+      }
+    });
+
+    items.Add(new TypoableString("bandage", 1), new ItemEntry {
+      name = "bandage",
+      price = 10,
+      category = "Health",
+      description = "Give youself regen for 10 minutes when used, you'll ultimately regen 12 health after the 10 minutes",
+      shortDescription = "Regen a bit more health when used than bandaids",
+      classData = new ItemClassData {
+        clazz = typeof(Bandage),
+        constructorArgs = new object[] {}
+      }
+    });
+
     notForSaleItems.Add("Stonk", new ItemClassData {
       constructorArgs = new Object[] {},
       clazz = typeof(Stonk)

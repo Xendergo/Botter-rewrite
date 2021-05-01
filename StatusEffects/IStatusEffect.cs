@@ -28,6 +28,7 @@ namespace StatusEffects {
       effect.channel = channel;
       effect.ToRemove = predicate;
       user.AddStatusEffectOnlytoBeUsedByIStatusEffect(effect);
+      effect.onCreate();
       return effect;
     }
 

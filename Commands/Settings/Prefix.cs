@@ -22,6 +22,7 @@ namespace Commands {
 
     public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       await guild.setPrefix(args.strings["prefix"]);
+      await msg.RespondAsync($"Successfully changed the prefix to **{args.strings["prefix"]}**");
     }
   }
 }
