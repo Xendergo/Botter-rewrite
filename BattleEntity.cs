@@ -5,7 +5,25 @@ using Items;
 using StatusEffects;
 using DSharpPlus.Entities;
 
-public abstract class BattleEntity<K, V> : Cacheable<K, V> {
+public interface BattleEntity {
+  int health {get; set;}
+  int magic {get; set;}
+  int coins {get;}
+  Battle battle {get; set;}
+  Task<string> username {get;}
+  List<IItem> items {get;}
+  List<IStatusEffect> effects {get;}
+  List<ElectricityConsumer> consumers {get;}
+  void TransferCoins(int amt);
+  int calcTax(int amt);
+  IItem GetItem(string name);
+  Optional<T> GetEffect<T>() where T : IStatusEffect;
+  int CalculatePower();
+  void BattleTick();
+  void AddStatusEffectOnlytoBeUsedByIStatusEffect(IStatusEffect effect);
+}
+
+public abstract class BattleEntityImpl<K, V> : Cacheable<K, V>, BattleEntity {
   private int _health;
   public int health {
     get {
@@ -17,17 +35,16 @@ public abstract class BattleEntity<K, V> : Cacheable<K, V> {
     }
   }
 
-  public int magic;
+  public int magic {get; set;}
   public int coins {get; private set;}
-  public Battle battle = null;
+  public Battle battle {get; set;} = null;
   public abstract Task<string> username {get; protected set;}
-  public List<IItem> items = new List<IItem>();
-  public List<IStatusEffect> effects = new List<IStatusEffect>();
-  public List<ElectricityConsumer> consumers = new List<ElectricityConsumer>();
+  public List<IItem> items {get; private set;} = new List<IItem>();
+  public List<IStatusEffect> effects {get;} = new List<IStatusEffect>();
+  public List<ElectricityConsumer> consumers {get;} = new List<ElectricityConsumer>();
   private bool isTicking = false;
 
-
-  protected BattleEntity(int coins, int magic, int health, K id, Dictionary<K, V> cache) : base(id, cache) {
+  protected BattleEntityImpl(int coins, int magic, int health, K id, Dictionary<K, V> cache) : base(id, cache) {
     this.magic = magic;
     this.health = health;
     this.coins = coins;
@@ -41,6 +58,7 @@ public abstract class BattleEntity<K, V> : Cacheable<K, V> {
   public int calcTax(int amt) {
     return calcTax(amt, coins);
   }
+
   public static int calcTax(int amt, int wealth) {
     // Sales tax dependent on wealth
     // Equasion where c is wealth & p is amt
@@ -64,7 +82,6 @@ public abstract class BattleEntity<K, V> : Cacheable<K, V> {
 
     throw new CommandException($"You don't have a {itemName.value}");
   }
-
   
   public Optional<T> GetEffect<T>() where T : IStatusEffect {
     float maxIntensity = 0;
@@ -80,7 +97,7 @@ public abstract class BattleEntity<K, V> : Cacheable<K, V> {
     return ret;
   }
 
-    public int CalculatePower() {
+  public int CalculatePower() {
     int total = 0;
     foreach (IItem item in items) {
       if (item is IPowerGen) {

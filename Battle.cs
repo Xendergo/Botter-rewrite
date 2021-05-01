@@ -4,10 +4,9 @@ using DSharpPlus.Entities;
 using System;
 
 public class Battle {
-  public HashSet<User> players = new HashSet<User>();
+  public HashSet<BattleEntity> players = new HashSet<BattleEntity>();
   private Dictionary<ulong, Dictionary<ulong, int>> distances = new Dictionary<ulong, Dictionary<ulong, int>>();
   public DiscordChannel MostRecentChannel;
-
   public Battle(DiscordChannel channel, User firstPlayer) {
     MostRecentChannel = channel;
     players.Add(firstPlayer);

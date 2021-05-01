@@ -13,7 +13,7 @@ public struct Stats {
   public int Interactions;
 }
 
-public sealed class User : BattleEntity<ulong, User> {
+public sealed class User : BattleEntityImpl<ulong, User> {
   /// <summary>The user's statistics, mutations are automatically saved when the player is removed form cache
   /// (with the exception of removing items from the player, unless you use the item's `removeSelf` method)</summary>
   public Stats stats;
