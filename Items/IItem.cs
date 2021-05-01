@@ -7,7 +7,7 @@ namespace Items {
     public Optional<long> id;
     public abstract string name {get;}
     public User owner;
-    protected async Task removeSelf() {
+    public async Task removeSelf() {
       owner.items.Remove(this);
 
       if (id.HasValue) {

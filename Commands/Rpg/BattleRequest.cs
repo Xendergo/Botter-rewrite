@@ -10,7 +10,7 @@ namespace Commands {
     public string help {get;} = "Request to have a fight with someone";
     public string helpShort {get;} = "Start a fight with someone";
     public string[] signature {get;} = new string[] {"@player"};
-    public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("battlerequest", 3), new TypoableString("fightrequest", 3), new TypoableString("requestfight", 3), new TypoableString("requestbattle", 3)};
+    public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("battlerequest", 3), new TypoableString("fightrequest", 3), new TypoableString("requestfight", 3), new TypoableString("requestbattle", 3), new TypoableString("b", 0)};
     public string category {get;} = "Rpg";
     public bool admin {get;} = false;
     public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {

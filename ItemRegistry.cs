@@ -82,6 +82,18 @@ public static class ItemRegistry {
       }
     });
 
+    items.Add(new TypoableString("slingshot", 1), new ItemEntry {
+      name = "slingshot",
+      price = 0,
+      category = "Weapons",
+      description = "Deal 5 damage, can be used 50 times",
+      shortDescription = "Deal 5 damage, lasts a while",
+      classData = new ItemClassData {
+        clazz = typeof(Slingshot),
+        constructorArgs = null
+      }
+    });
+
     items.Add(new TypoableString("potato", 1), new ItemEntry {
       name = "potato",
       price = 2,
