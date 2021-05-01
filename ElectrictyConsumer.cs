@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using System;
 public class ElectricityConsumer {
-  public User user {get;}
+  public BattleEntity user {get;}
   public Func<ElectricityConsumer, int> electricityConsumption {get;}
   // Called when there's not enough power to sustain this consumer
   public Action<ElectricityConsumer> OutOfPower;
@@ -10,7 +10,7 @@ public class ElectricityConsumer {
   public Action<ElectricityConsumer> OnRemoved;
   public bool hasPower = true;
   bool removed = false;
-  public ElectricityConsumer(User user, Func<ElectricityConsumer, int> electricityConsumption) {
+  public ElectricityConsumer(BattleEntity user, Func<ElectricityConsumer, int> electricityConsumption) {
     this.electricityConsumption = electricityConsumption;
     this.user = user;
   }

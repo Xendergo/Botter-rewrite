@@ -35,5 +35,5 @@ abstract class IBattleCommand : ICommand {
     await Exec(client, args, msg, guild, user, user.battle);
   }
 
-  protected abstract Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user, Battle battle);
+  protected abstract Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, BattleEntity user, Battle battle);
 }

@@ -10,11 +10,11 @@ namespace Commands {
     public override string helpShort {get;} = "Leave a battle";
     public override string[] signature {get;} = new string[] {};
     public override TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("leave", 1), new TypoableString("leavebattle", 3)};
-    protected override async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user, Battle battle) {
+    protected override async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, BattleEntity user, Battle battle) {
       battle.players.Remove(user);
       user.battle = null;
       await msg.RespondAsync("You successfully left the battle");
-      await battle.MostRecentChannel.SendMessageAsync($"<@!{user.id}> left the battle");
+      await battle.MostRecentChannel.SendMessageAsync($"{user.username} left the battle");
     }
   }
 }

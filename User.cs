@@ -1,7 +1,13 @@
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
 using Botter_rewrite;
-using StatusEffects;
+
+// public class temp : BattleEntityImpl<ulong, temp> {
+//   public override Task<string> username { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
+//   public temp() : base(0, 0, 0, 0, null) {
+
+//   }
+// }
 
 public struct Stats {
   public int GotSniped;

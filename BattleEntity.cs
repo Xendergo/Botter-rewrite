@@ -11,9 +11,10 @@ public interface BattleEntity {
   int coins {get;}
   Battle battle {get; set;}
   Task<string> username {get;}
-  List<IItem> items {get;}
+  List<IItem> items {get; set;}
   List<IStatusEffect> effects {get;}
   List<ElectricityConsumer> consumers {get;}
+  ulong idCode {get;}
   void TransferCoins(int amt);
   int calcTax(int amt);
   IItem GetItem(string name);
@@ -39,9 +40,12 @@ public abstract class BattleEntityImpl<K, V> : Cacheable<K, V>, BattleEntity {
   public int coins {get; private set;}
   public Battle battle {get; set;} = null;
   public abstract Task<string> username {get; protected set;}
-  public List<IItem> items {get; private set;} = new List<IItem>();
+  public List<IItem> items {get; set;} = new List<IItem>();
   public List<IStatusEffect> effects {get;} = new List<IStatusEffect>();
   public List<ElectricityConsumer> consumers {get;} = new List<ElectricityConsumer>();
+  public ulong idCode {get {
+    return (ulong)id.GetHashCode();
+  }}
   private bool isTicking = false;
 
   protected BattleEntityImpl(int coins, int magic, int health, K id, Dictionary<K, V> cache) : base(id, cache) {

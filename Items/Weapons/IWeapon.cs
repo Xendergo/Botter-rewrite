@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Items {
   public abstract class IWeapon : IDegradable {
-    public async Task<string> Attack(User target, User attacker, DiscordMessage msg) {
+    public async Task<string> Attack(BattleEntity target, BattleEntity attacker, DiscordMessage msg) {
       damage++;
 
       if (damage == maxDamage) {
@@ -14,6 +14,6 @@ namespace Items {
       return await DoAttack(target, attacker, msg);
     }
 
-    protected abstract Task<string> DoAttack(User target, User attacker, DiscordMessage msg);
+    protected abstract Task<string> DoAttack(BattleEntity target, BattleEntity attacker, DiscordMessage msg);
   }
 }

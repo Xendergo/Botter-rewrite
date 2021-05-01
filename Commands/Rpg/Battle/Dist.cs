@@ -10,11 +10,11 @@ namespace Commands {
     public override string helpShort {get;} = "Set your distance to another player";
     public override string[] signature {get;} = new string[] {"@target", "#dist"};
     public override TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("dist", 1), new TypoableString("distance", 3), new TypoableString("d", 0)};
-    protected override async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user, Battle battle) {
-      User target = await Database.getUser(args.users["target"]);
+    protected override async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, BattleEntity user, Battle battle) {
+      BattleEntity target = await Database.getUser(args.users["target"]);
       int dist = (int)args.nums["dist"];
       battle.setDistance(user, target, dist);
-      await msg.RespondAsync($"Your distance to <@!{target.id}> is now **{dist} units**");
+      await msg.RespondAsync($"Your distance to {await target.username} is now **{dist} units**");
     }
   }
 }

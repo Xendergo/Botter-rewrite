@@ -1,13 +1,12 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DSharpPlus.Entities;
-using System;
 
 public class Battle {
   public HashSet<BattleEntity> players = new HashSet<BattleEntity>();
   private Dictionary<ulong, Dictionary<ulong, int>> distances = new Dictionary<ulong, Dictionary<ulong, int>>();
   public DiscordChannel MostRecentChannel;
-  public Battle(DiscordChannel channel, User firstPlayer) {
+  public Battle(DiscordChannel channel, BattleEntity firstPlayer) {
     MostRecentChannel = channel;
     players.Add(firstPlayer);
     tickPlayers();
@@ -15,7 +14,7 @@ public class Battle {
 
   private async void tickPlayers() {
     while (players.Count > 0) {
-      foreach (User user in players) {
+      foreach (BattleEntity user in players) {
         user.BattleTick();
       }
 
@@ -23,15 +22,15 @@ public class Battle {
     }
   }
 
-  public int getDistance(User player1, User player2) {
+  public int getDistance(BattleEntity player1, BattleEntity player2) {
     if (!players.Contains(player1)) throw new CommandException("Can't get distance between these players, one of them isn't in the battle");
     if (!players.Contains(player2)) throw new CommandException("Can't get distance between these players, one of them isn't in the battle");
 
     ulong[] ids;
-    if (player1.id > player2.id) {
-      ids = new ulong[] {player1.id, player2.id};
+    if (player1.idCode > player2.idCode) {
+      ids = new ulong[] {player1.idCode, player2.idCode};
     } else {
-      ids = new ulong[] {player2.id, player1.id};
+      ids = new ulong[] {player2.idCode, player1.idCode};
     }
 
     if (!distances.ContainsKey(ids[0])) {
@@ -45,12 +44,12 @@ public class Battle {
     return distances[ids[0]][ids[1]];
   }
 
-  public void setDistance(User player1, User player2, int dist) {
+  public void setDistance(BattleEntity player1, BattleEntity player2, int dist) {
     ulong[] ids;
-    if (player1.id > player2.id) {
-      ids = new ulong[] {player1.id, player2.id};
+    if (player1.idCode > player2.idCode) {
+      ids = new ulong[] {player1.idCode, player2.idCode};
     } else {
-      ids = new ulong[] {player2.id, player1.id};
+      ids = new ulong[] {player2.idCode, player1.idCode};
     }
 
     if (!distances.ContainsKey(ids[0])) {

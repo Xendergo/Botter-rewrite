@@ -16,7 +16,9 @@ namespace Commands {
       // There's no effects registry so I can't auto-generate the help message for them
       await msg.RespondAsync(@"All status effects possible
 
-Illness - Reduces the amount of damage you deal in a fight");
+Illness - Reduces the amount of damage you deal in a fight
+Regen - Regenerate health over time
+Stun - Prevents you from executing battle commands system");
     }
   }
 }

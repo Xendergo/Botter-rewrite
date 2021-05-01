@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
-using System.Threading.Tasks;
 using StatusEffects;
 
 namespace Items {
@@ -8,7 +7,7 @@ namespace Items {
     override public string name {get;} = "taser";
     public override int maxDamage {get;} = 25;
     public override int damageToDeal {get;} = 1;
-    override protected async Task<string> DoAttack(User target, User stabber, DiscordMessage msg) {
+    override protected async Task<string> DoAttack(BattleEntity target, BattleEntity stabber, DiscordMessage msg) {
       Stun effect1 = IStatusEffect.AddStatusEffect<Stun>(target, 10, 1F, msg.Channel);
       Stun effect2 = IStatusEffect.AddStatusEffect<Stun>(target, 10, 1F, msg.Channel);
       ElectricityConsumer consumer = new ElectricityConsumer(stabber, (c) => 2);
