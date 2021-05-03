@@ -84,12 +84,36 @@ public static class ItemRegistry {
 
     items.Add(new TypoableString("slingshot", 1), new ItemEntry {
       name = "slingshot",
-      price = 0,
+      price = 20,
       category = "Weapons",
-      description = "Deal 5 damage, can be used 50 times",
-      shortDescription = "Deal 5 damage, lasts a while",
+      description = "Deal 5 damage, can be used 50 times, required no ammo",
+      shortDescription = "Deal 5 damage, lasts a while, requires no ammo",
       classData = new ItemClassData {
         clazz = typeof(Slingshot),
+        constructorArgs = null
+      }
+    });
+
+    items.Add(new TypoableString("potato-gun", 1), new ItemEntry {
+      name = "potato-gun",
+      price = 50,
+      category = "Weapons",
+      description = "Deal 12 damage, can be used 20 times, requires potatoes as ammo",
+      shortDescription = "Deal 12 damage, can be used 20 times, requires potatoes as ammo",
+      classData = new ItemClassData {
+        clazz = typeof(PotatoGun),
+        constructorArgs = null
+      }
+    });
+
+    items.Add(new TypoableString("frog-launcher", 1), new ItemEntry {
+      name = "frog-launcher",
+      price = 60,
+      category = "Weapons",
+      description = "Deal 0 damage, can be used 30 times, requires frogs for ammo, gives your opponent poison for 40 seconds, doing 20 damage in total",
+      shortDescription = "Deal 0 damage, gives your opponent poison",
+      classData = new ItemClassData {
+        clazz = typeof(FrogLauncher),
         constructorArgs = null
       }
     });
@@ -150,6 +174,18 @@ public static class ItemRegistry {
       shortDescription = "Regen a bit more health when used than bandaids",
       classData = new ItemClassData {
         clazz = typeof(Bandage),
+        constructorArgs = new object[] {}
+      }
+    });
+
+    items.Add(new TypoableString("frog", 1), new ItemEntry {
+      name = "frog",
+      price = 3,
+      category = "Other",
+      description = "Ammo for frog launcher, poisonous in general",
+      shortDescription = "Poisonous and ammo for frog launcher",
+      classData = new ItemClassData {
+        clazz = typeof(Frog),
         constructorArgs = new object[] {}
       }
     });

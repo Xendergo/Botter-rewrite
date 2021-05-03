@@ -15,13 +15,6 @@ namespace Items {
       await msg.RespondAsync($"You ate a **{name}** and gained **{health}hp**, leaving you with **{owner.health}hp**");
     }
 
-    override public JObject Serialize() {
-      return new JObject();
-    }
-
-    override public void Deserialize(JObject str) {
-      return;
-    }
     override public string Display() {
       return "";
     }

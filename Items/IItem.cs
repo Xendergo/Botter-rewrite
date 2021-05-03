@@ -15,7 +15,7 @@ namespace Items {
       }
     }
     public abstract string Display();
-    public abstract JObject Serialize();
-    public abstract void Deserialize(JObject str);
+    public virtual JObject Serialize() { return new JObject(); }
+    public virtual void Deserialize(JObject str) {}
   }
 }
