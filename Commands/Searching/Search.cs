@@ -11,6 +11,7 @@ using GoogleApi.Entities.Search.Common.Enums;
 using GoogleApi;
 
 namespace Commands {
+  [CommandAttribute(6)]
   class Search : ICommand {
     private static Random rand = new Random();
     public string help {get;}

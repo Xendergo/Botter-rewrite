@@ -5,6 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
+  [CommandAttribute(18)]
   class Menu : ICommand {
     public string help {get;} = "See a list of all the items you can buy, or get info for a specific one";
     public string helpShort {get;} = "See a list of all the items you can buy";

@@ -5,6 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
+  [CommandAttribute(27)]
   class Src : ICommand {
     public string help {get;} = "Get a link to Botter's github repository";
     public string helpShort {get;} = "Get a link to the source code";

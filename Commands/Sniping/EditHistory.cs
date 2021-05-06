@@ -7,6 +7,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 
 namespace Commands {
+  [CommandAttribute(4)]
   class EditHistory : ICommand {
     public string help {get;}
     public string helpShort {get;}

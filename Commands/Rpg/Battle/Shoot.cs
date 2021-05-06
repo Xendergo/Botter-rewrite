@@ -7,6 +7,7 @@ using DSharpPlus.Entities;
 using Items;
 
 namespace Commands {
+  [CommandAttribute(26)]
   class Shoot : IBattleCommand {
     public override string help {get;} = "Shoot someone";
     public override string helpShort {get;} = "Shoot someone";

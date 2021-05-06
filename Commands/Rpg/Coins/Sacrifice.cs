@@ -5,6 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
+  [CommandAttribute(14)]
   class Sacrifice : ICommand {
     public string help {get;} = "Sacrifice part of your health to satan and get coins in return";
     public string helpShort {get;} = "Sacrifice health to get coins";

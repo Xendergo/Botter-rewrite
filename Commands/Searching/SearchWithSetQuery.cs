@@ -6,6 +6,13 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
+  [CommandAttribute(6, args = new object[] {"otter", "otter", 1})]
+  [CommandAttribute(7, args = new object[] {"daughter", "ferret", 1})]
+  [CommandAttribute(8, args = new object[] {"wife", "moth", 1})]
+  [CommandAttribute(9, args = new object[] {"lämp", "lämp", 2})]
+  [CommandAttribute(10, args = new object[] {"aunt", "bunny", 1})]
+  [CommandAttribute(11, args = new object[] {"stepdaughter", "crow", 4})]
+  [CommandAttribute(12, args = new object[] {"blender", "blender", 1})]
   class SearchWithSetQuery : ICommand {
     public string help {get;}
     public string helpShort {get;}

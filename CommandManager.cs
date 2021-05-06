@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System;
@@ -86,44 +87,22 @@ static class CommandManager {
     }
   }
 
-  public static void AddCommands() {
-    commandsSet.Add(new Help());
+  public static void AddCommands() { 
+    List<(float, ICommand)> commandsList = new List<(float, ICommand)>();
 
-    commandsSet.Add(new Prefix());
+    foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
+      if (!typeof(ICommand).IsAssignableFrom(type)) continue;
 
-    commandsSet.Add(new Snipe());
-    commandsSet.Add(new EditHistory());
-    commandsSet.Add(new Shotgun());
+      foreach (CommandAttribute listing in type.GetCustomAttributes<CommandAttribute>()) {
+        int index = commandsList.FindIndex((v) => v.Item1 > listing.ordinal);
+        if (index == -1) index = commandsList.Count;
+        commandsList.Insert(index, (listing.ordinal, (ICommand)Activator.CreateInstance(type, listing.args)));
+      }
+    }
 
-    commandsSet.Add(new Search());
-    commandsSet.Add(new SearchWithSetQuery("otter", "otter", 1));
-    commandsSet.Add(new SearchWithSetQuery("daughter", "ferret", 1));
-    commandsSet.Add(new SearchWithSetQuery("wife", "moth", 1));
-    commandsSet.Add(new SearchWithSetQuery("lämp", "lämp", 2));
-    commandsSet.Add(new SearchWithSetQuery("aunt", "bunny", 1));
-    commandsSet.Add(new SearchWithSetQuery("stepdaughter", "crow", 4));
-    commandsSet.Add(new SearchWithSetQuery("blender", "blender", 1));
-
-    commandsSet.Add(new StatsCmd());
-
-    commandsSet.Add(new Sacrifice());
-    commandsSet.Add(new Stonks());
-    commandsSet.Add(new CalcTax());
-    commandsSet.Add(new Inv());
-    commandsSet.Add(new BattleRequest());
-    commandsSet.Add(new Menu());
-    commandsSet.Add(new Buy());
-    commandsSet.Add(new Sell());
-    commandsSet.Add(new Use());
-    commandsSet.Add(new Effects());
-
-    commandsSet.Add(new Dist());
-    commandsSet.Add(new LeaveBattle());
-    commandsSet.Add(new Stab());
-    commandsSet.Add(new Shoot());
- 
-    commandsSet.Add(new Src());
-    commandsSet.Add(new Debug());
+    foreach ((float, ICommand) command in commandsList) {
+      commandsSet.Add(command.Item2);
+    }
 
     AddCommandsToDictionary();
   }

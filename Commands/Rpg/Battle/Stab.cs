@@ -7,6 +7,7 @@ using Items;
 using StatusEffects;
 
 namespace Commands {
+  [CommandAttribute(25)]
   class Stab : IBattleCommand {
     public override string help {get;} = "Stab someone";
     public override string helpShort {get;} = "Stab someone";

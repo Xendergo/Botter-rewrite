@@ -7,6 +7,7 @@ using Items;
 using StatusEffects;
 
 namespace Commands {
+  [CommandAttribute(17)]
   class Inv : ICommand {
     public string help {get;} = "See your inventory as well as other game data";
     public string helpShort {get;} = "See your inventory & game data";

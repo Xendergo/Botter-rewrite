@@ -5,6 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
+  [CommandAttribute(23)]
   class Dist : IBattleCommand {
     public override string help {get;} = "Set your distance to the other player (distance to other players in unchanged (physics is ignored for simplicity))";
     public override string helpShort {get;} = "Set your distance to another player";
