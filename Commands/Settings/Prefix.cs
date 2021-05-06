@@ -5,7 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
-  [CommandAttribute(1)]
+  [Command(1)]
   class Prefix : ICommand {
     public string help {get;}
     public string helpShort {get;}

@@ -3,6 +3,16 @@ using DSharpPlus.Entities;
 using System.Threading.Tasks;
 
 namespace Items {
+  [Item(
+    6,
+    "potato",
+    1,
+    2,
+    "Food",
+    "Heal 2 health when used, also used as ammo for potato cannon",
+    "Heal 2 health when used, also used as ammo for potato cannon",
+    args = new object[] {"potato", 2}
+  )]
   class Food : IConsumable {
     override public string name {get;}
     private int health;

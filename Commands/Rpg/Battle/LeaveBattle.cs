@@ -5,7 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
-  [CommandAttribute(24)]
+  [Command(24)]
   class LeaveBattle : IBattleCommand {
     public override string help {get;} = "Leave a battle";
     public override string helpShort {get;} = "Leave a battle";

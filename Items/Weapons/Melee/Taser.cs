@@ -3,6 +3,15 @@ using DSharpPlus.Entities;
 using StatusEffects;
 
 namespace Items {
+  [Item(
+    2,
+    "taser",
+    4,
+    40,
+    "Weapons",
+    "Deal 0 damage, but give your opponent stun, but also give your stun as you hold the taser to them. Consumes 2kw. Effects last 10 seconds",
+    "Tase your target"
+  )]
   public class Taser : IMelee {
     override public string name {get;} = "taser";
     public override int maxDamage {get;} = 25;

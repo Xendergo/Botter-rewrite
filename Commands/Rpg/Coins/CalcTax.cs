@@ -5,7 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
-  [CommandAttribute(16)]
+  [Command(16)]
   class CalcTax : ICommand {
     public string help {get;} = "Calculate the amount of sales tax you would have to pay for a transaction";
     public string helpShort {get;} = "Calculate tax for a transaction";

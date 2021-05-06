@@ -5,7 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
-  [CommandAttribute(19)]
+  [Command(19)]
   class Buy : ICommand {
     public string help {get;} = "Buy an item from the store";
     public string helpShort {get;} = "Buy an item";

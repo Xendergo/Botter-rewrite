@@ -4,6 +4,15 @@ using System.Threading.Tasks;
 using StatusEffects;
 
 namespace Items {
+  [Item(
+    10,
+    "bandage",
+    1,
+    10,
+    "Health",
+    "Give youself regen for 10 minutes when used, you'll ultimately regen 12 health after the 10 minutes",
+    "Regen a bit more health when used than bandaids"
+  )]
   class Bandage : IConsumable {
     override public string name {get;} = "bandage";
 

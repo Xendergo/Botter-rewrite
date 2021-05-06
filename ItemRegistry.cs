@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
@@ -46,153 +47,46 @@ public static class ItemRegistry {
   }
 
   public static void RegisterItems() {
-    items.Add(new TypoableString("golden-sword", 2), new ItemEntry {
-      name = "Golden-sword",
-      price = 25,
-      category = "Weapons",
-      description = "Deal 10 damage, breaks after 15 uses",
-      shortDescription = "Deals a lot of damage, breaks quickly",
-      classData = new ItemClassData {
-        clazz = typeof(GoldenSword),
-        constructorArgs = null
-      }
-    });
+    List<(float, TypoableString, ItemEntry)> itemsList = new List<(float, TypoableString, ItemEntry)>();
 
-    items.Add(new TypoableString("petrified-poop-sword", 4), new ItemEntry {
-      name = "petrified-poop-sword",
-      price = 40,
-      category = "Weapons",
-      description = "Deal 1 damage, but give the illness effect for 30 seconds, breaks after 25 uses",
-      shortDescription = "Give your target an illness",
-      classData = new ItemClassData {
-        clazz = typeof(PetrifiedPoopSword),
-        constructorArgs = null
-      }
-    });
+    foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
+      if (!typeof(IItem).IsAssignableFrom(type)) continue;
 
-    items.Add(new TypoableString("taser", 1), new ItemEntry {
-      name = "taser",
-      price = 40,
-      category = "Weapons",
-      description = "Deal 0 damage, but give your opponent stun, but also give your stun as you hold the taser to them. Consumes 2kw. Effects last 10 seconds",
-      shortDescription = "Tase your target",
-      classData = new ItemClassData {
-        clazz = typeof(Taser),
-        constructorArgs = null
-      }
-    });
+      foreach (ItemAttribute listing in type.GetCustomAttributes<ItemAttribute>()) {
+        int index = itemsList.FindIndex((v) => v.Item1 > listing.ordinal);
+        if (index == -1) index = itemsList.Count;
 
-    items.Add(new TypoableString("slingshot", 1), new ItemEntry {
-      name = "slingshot",
-      price = 20,
-      category = "Weapons",
-      description = "Deal 5 damage, can be used 50 times, required no ammo",
-      shortDescription = "Deal 5 damage, lasts a while, requires no ammo",
-      classData = new ItemClassData {
-        clazz = typeof(Slingshot),
-        constructorArgs = null
-      }
-    });
+        ItemEntry entry = new ItemEntry {
+          name = listing.name.value,
+          price = listing.price,
+          category = listing.category,
+          description = listing.description,
+          shortDescription = listing.shortDescription,
+          classData = new ItemClassData {
+            clazz = type,
+            constructorArgs = listing.args
+          }
+        };
 
-    items.Add(new TypoableString("potato-gun", 1), new ItemEntry {
-      name = "potato-gun",
-      price = 50,
-      category = "Weapons",
-      description = "Deal 12 damage, can be used 20 times, requires potatoes as ammo",
-      shortDescription = "Deal 12 damage, can be used 20 times, requires potatoes as ammo",
-      classData = new ItemClassData {
-        clazz = typeof(PotatoGun),
-        constructorArgs = null
+        itemsList.Insert(index, (listing.ordinal, listing.name, entry));
       }
-    });
+    }
 
-    items.Add(new TypoableString("frog-launcher", 1), new ItemEntry {
-      name = "frog-launcher",
-      price = 60,
-      category = "Weapons",
-      description = "Deal 0 damage, can be used 30 times, requires frogs for ammo, gives your opponent poison for 40 seconds, doing 20 damage in total",
-      shortDescription = "Deal 0 damage, gives your opponent poison",
-      classData = new ItemClassData {
-        clazz = typeof(FrogLauncher),
-        constructorArgs = null
+    foreach ((float, TypoableString, ItemEntry) command in itemsList) {
+      items.Add(command.Item2, command.Item3);
+    }
+
+    foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
+      if (!typeof(IItem).IsAssignableFrom(type)) continue;
+
+      foreach (HiddenItemAttribute listing in type.GetCustomAttributes<HiddenItemAttribute>()) {
+        ItemClassData entry = new ItemClassData {
+          clazz = type,
+          constructorArgs = listing.args
+        };
+
+        notForSaleItems.Add(listing.name, entry);
       }
-    });
-
-    items.Add(new TypoableString("potato", 1), new ItemEntry {
-      name = "potato",
-      price = 2,
-      category = "Food",
-      description = "Heal 2 health when used, also used as ammo for potato cannon",
-      shortDescription = "Heal 2 health when used, also used as ammo for potato cannon",
-      classData = new ItemClassData {
-        clazz = typeof(Food),
-        constructorArgs = new Object[] {"potato", 2}
-      }
-    });
-
-    items.Add(new TypoableString("bond", 1), new ItemEntry {
-      name = "bond",
-      price = 10,
-      category = "Coins",
-      description = "Lend out money, you get 1 coin in interest for every day you wait to sell this item",
-      shortDescription = "Lend out money and get back more in interest",
-      classData = new ItemClassData {
-        clazz = typeof(Bond),
-        constructorArgs = new Object[] {}
-      }
-    });
-
-    items.Add(new TypoableString("solar-panel", 2), new ItemEntry {
-      name = "solar-panel",
-      price = 10,
-      category = "Electricity",
-      description = "Generate 10kw for 10 minutes",
-      shortDescription = "Generate 10kw for 10 minutes",
-      classData = new ItemClassData {
-        clazz = typeof(SolarPanel),
-        constructorArgs = new Object[] {}
-      }
-    });
-
-    items.Add(new TypoableString("bandaid", 1), new ItemEntry {
-      name = "bandaid",
-      price = 3,
-      category = "Health",
-      description = "Give youself regen for 10 minutes when used, you'll ultimately regen 6 health after the 10 minutes",
-      shortDescription = "Regen a bit of health when used",
-      classData = new ItemClassData {
-        clazz = typeof(Bandaid),
-        constructorArgs = new object[] {}
-      }
-    });
-
-    items.Add(new TypoableString("bandage", 1), new ItemEntry {
-      name = "bandage",
-      price = 10,
-      category = "Health",
-      description = "Give youself regen for 10 minutes when used, you'll ultimately regen 12 health after the 10 minutes",
-      shortDescription = "Regen a bit more health when used than bandaids",
-      classData = new ItemClassData {
-        clazz = typeof(Bandage),
-        constructorArgs = new object[] {}
-      }
-    });
-
-    items.Add(new TypoableString("frog", 1), new ItemEntry {
-      name = "frog",
-      price = 3,
-      category = "Other",
-      description = "Ammo for frog launcher, poisonous in general",
-      shortDescription = "Poisonous and ammo for frog launcher",
-      classData = new ItemClassData {
-        clazz = typeof(Frog),
-        constructorArgs = new object[] {}
-      }
-    });
-
-    notForSaleItems.Add("Stonk", new ItemClassData {
-      constructorArgs = new Object[] {},
-      clazz = typeof(Stonk)
-    });
+    }
   }
 }

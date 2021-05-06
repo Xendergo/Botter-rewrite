@@ -5,7 +5,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
-  [CommandAttribute(22)]
+  [Command(22)]
   class Effects : ICommand {
     public string help {get;} = "See a list of all status effects";
     public string helpShort {get;} = "See a list of all status effects";

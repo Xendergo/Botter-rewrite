@@ -6,7 +6,7 @@ using DSharpPlus.Entities;
 using Items;
 
 namespace Commands {
-  [CommandAttribute(15)]
+  [Command(15)]
   class Stonks : ICommand {
     public string help {get;} = "Trade stocks in game using real life prices";
     public string helpShort {get;} = "Trade stocks";

@@ -1,6 +1,15 @@
 using Newtonsoft.Json.Linq;
 
 namespace Items {
+  [Item(
+    8,
+    "solar-panel",
+    2,
+    10,
+    "Electricity",
+    "Generate 10kw for 10 minutes",
+    "Generate 10kw for 10 minutes"
+  )]
   class SolarPanel : IPowerGen {
     private int timeLeft = 600;
     public override string name {get;} = "solar-panel";

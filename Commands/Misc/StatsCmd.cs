@@ -6,7 +6,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
-  [CommandAttribute(13)]
+  [Command(13)]
   class StatsCmd : ICommand {
     public string help {get;} = "See your statistics, or ping someone to see their statistics";
     public string helpShort {get;} = "See your statistics";

@@ -6,7 +6,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 
 namespace Commands {
-  [CommandAttribute(28)]
+  [Command(28)]
   class Debug : ICommand {
     public string help {get;}
     public string helpShort {get;}

@@ -6,7 +6,7 @@ using DSharpPlus.Entities;
 using Items;
 
 namespace Commands {
-  [CommandAttribute(20)]
+  [Command(20)]
   class Sell : ICommand {
     public string help {get;} = "Sell an item to get your money back";
     public string helpShort {get;} = "Sell an item";

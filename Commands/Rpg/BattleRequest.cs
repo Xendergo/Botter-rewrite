@@ -6,7 +6,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 
 namespace Commands {
-  [CommandAttribute(18)]
+  [Command(18)]
   class BattleRequest : ICommand {
     public string help {get;} = "Request to have a fight with someone";
     public string helpShort {get;} = "Start a fight with someone";

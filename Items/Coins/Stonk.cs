@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 namespace Items {
-  // public abstract class 
+  [HiddenItem("Stonk")]
   public class Stonk : IItem {
     override public string name {get;} = "Stonk";
     public float priceBought;

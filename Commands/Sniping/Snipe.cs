@@ -7,7 +7,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 
 namespace Commands {
-  [CommandAttribute(2)]
+  [Command(2)]
   class Snipe : ICommand {
     public string help {get;}
     public string helpShort {get;}

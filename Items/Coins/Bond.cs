@@ -2,6 +2,15 @@ using Newtonsoft.Json.Linq;
 using System;
 
 namespace Items {
+  [Item(
+    7,
+    "bond",
+    1,
+    10,
+    "Coins",
+    "Lend out money, you get 1 coin in interest for every day you wait to sell this item",
+    "Lend out money and get back more in interest"
+  )]
   class Bond : ISellable {
     long buyTime;
     public override string name {get;} = "bond";

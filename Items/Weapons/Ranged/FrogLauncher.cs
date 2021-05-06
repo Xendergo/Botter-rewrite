@@ -3,6 +3,15 @@ using System;
 using StatusEffects;
 
 namespace Items {
+  [Item(
+    5,
+    "frog-launcher",
+    1,
+    60,
+    "Weapons",
+    "Deal 0 damage, can be used 30 times, requires frogs for ammo, gives your opponent poison for 40 seconds, doing 20 damage in total",
+    "Deal 0 damage, gives your opponent poison"
+  )]
   class FrogLauncher : IRanged {
     public override int maxDamage {get;} = 30;
     public override string name {get;} = "frog-launcher";
