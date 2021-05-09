@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+using NUnit.Framework;
+
 public class TypoableString : IEquatable<TypoableString> {
   public string value;
   public int maxErrors;
@@ -45,26 +47,40 @@ public class TypoableString : IEquatable<TypoableString> {
     return ret;
   }
 
-  // https://github.com/tallesl/wagner-fischer/blob/master/lib/wagner-fischer.js
-  private static int LevenshteinDistance(string a, string b) {
+  // https://www.dotnetperls.com/levenshtein
+  // https://stackoverflow.com/questions/10178043/levenshtein-edit-distance-algorithm-that-supports-transposition-of-two-adjacent
+  public static int LevenshteinDistance(string a, string b) {
     int[,] grid = new int[a.Length + 1, b.Length + 1];
 
-    for (int i = 1; i <= a.Length; i++) {
+    if (a.Length == 0) {
+      return b.Length;
+    }
+
+    if (b.Length == 0) {
+      return a.Length;
+    }
+
+    for (int i = 0; i <= a.Length; i++) {
       grid[i, 0] = i;
     }
 
-    for (int j = 1; j <= b.Length; j++) {
+    for (int j = 0; j <= b.Length; j++) {
       grid[0, j] = j;
     }
 
-    for (int j = 1; j <= b.Length; j++) {
-      for (int i = 1; i <= a.Length; i++) {
-        grid[i, j] = a[i - 1] == b[j - 1] ? grid[i - 1, j - 1]
-                                            :
-                                            Math.Min(Math.Min(
-                                            grid[i - 1, j] + 1,
-                                            grid[i, j - 1] + 1),
-                                            grid[i - 1, j - 1] + 1);
+    for (int i = 1; i <= a.Length; i++) {
+      for (int j = 1; j <= b.Length; j++) {
+        int cost = (b[j - 1] == a[i - 1]) ? 0 : 1;
+        grid[i, j] = Math.Min(
+        Math.Min(grid[i - 1, j] + 1, grid[i, j - 1] + 1),
+        grid[i - 1, j - 1] + cost);
+
+        if (i > 1 && j > 1 && (a[i - 1] == b[j - 2]) && (a[i - 2] == b[j - 1])) {
+          grid[i, j] = Math.Min(
+            grid[i, j],
+            grid[i - 2, j - 2] + cost
+          );
+        }
       }
     }
 
