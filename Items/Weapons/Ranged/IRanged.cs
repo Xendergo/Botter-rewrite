@@ -25,18 +25,12 @@ namespace Items {
 
       await Task.Delay((int)(time * 1000));
 
-      // Generate a random number within a particular distribution dependent on the distance
-      double v = InverseLogisticCurve(new Random().NextDouble(), dist);
+      float annoyanceIntensity = attacker.GetEffectStrength<Annoyance>();
 
-      float illnessIntensity;
+      // Generate a random number within a particular distribution dependent on the distance & annoyance strength
+      double v = InverseLogisticCurve(new Random().NextDouble(), dist * (1 + annoyanceIntensity * 0.2));
 
-      Optional<Illness> illness = attacker.GetEffect<Illness>();
-
-      if (illness.HasValue) {
-        illnessIntensity = illness.Value.intensity;
-      } else {
-        illnessIntensity = 0;
-      }
+      float illnessIntensity = attacker.GetEffectStrength<Illness>();
 
       int damageToDealAfterIllness = (int)(damageToDeal * (1 - illnessIntensity));
 

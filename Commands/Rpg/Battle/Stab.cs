@@ -26,15 +26,7 @@ namespace Commands {
         throw new CommandException("You must be at most 5 units apart to use melee weapons");
       }
 
-      float illnessIntensity;
-
-      Optional<Illness> illness = user.GetEffect<Illness>();
-
-      if (illness.HasValue) {
-        illnessIntensity = illness.Value.intensity;
-      } else {
-        illnessIntensity = 0;
-      }
+      float illnessIntensity = user.GetEffectStrength<Illness>();
 
       int damage = (int)(weapon.damageToDeal * (1 - illnessIntensity));
 

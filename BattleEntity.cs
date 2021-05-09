@@ -19,6 +19,7 @@ public interface BattleEntity {
   int calcTax(int amt);
   IItem GetItem(string name);
   Optional<T> GetEffect<T>() where T : IStatusEffect;
+  float GetEffectStrength<T>() where T : IStatusEffect;
   int CalculatePower();
   void BattleTick();
   void AddStatusEffectOnlytoBeUsedByIStatusEffect(IStatusEffect effect);
@@ -99,6 +100,18 @@ public abstract class BattleEntityImpl<K, V> : Cacheable<K, V>, BattleEntity {
     }
 
     return ret;
+  }
+
+  public float GetEffectStrength<T>() where T : IStatusEffect {
+    float totalIntensity = 0;
+
+    foreach (IStatusEffect effect in effects) {
+      if (effect is T) {
+        totalIntensity += effect.intensity;
+      }
+    }
+
+    return totalIntensity;
   }
 
   public int CalculatePower() {

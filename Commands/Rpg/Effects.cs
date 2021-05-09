@@ -17,7 +17,6 @@ namespace Commands {
     public bool admin {get;} = false;
     private string effects = String.Join('\n', from effect in TypesWithAttribute.GetOrderedTypesWithAttribute<EffectAttribute, IStatusEffect>() select $"`{effect.Item1.name}` - {effect.Item1.description}");
     public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
-      // There's no effects registry so I can't auto-generate the help message for them
       await msg.RespondAsync(@$"All status effects possible
 
 {effects}");

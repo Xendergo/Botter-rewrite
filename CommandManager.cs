@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System;
@@ -7,7 +6,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using System.Threading.Tasks;
-using Commands;
+using StatusEffects;
 
 struct Args {
   public Dictionary<string, string> strings;
@@ -68,6 +67,8 @@ static class CommandManager {
         await msg.RespondAsync(e.Message + $", type `botter help {corrected}` for extra help");
         return;
       }
+
+      await Task.Delay((int)(user.GetEffectStrength<Annoyance>() * 1000));
 
       try {
         await command.Exec(client, argsStruct, msg, guild, user);
