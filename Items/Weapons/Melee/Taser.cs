@@ -28,6 +28,8 @@ namespace Items {
         await msg.RespondAsync($"You ran out of power! You can no longer tase {await target.username}");
       };
 
+      consumer.DestroyAfter(10000);
+
       stabber.consumers.Add(consumer);
       return $"You are tasing {await target.username}, and your target got **Stun** for **10 seconds**";
     }

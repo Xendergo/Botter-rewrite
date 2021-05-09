@@ -26,7 +26,7 @@ namespace Items {
     }
 
     public override string Display() {
-      return $"Seconds left - {timeLeft}";
+      return $"Seconds left: {timeLeft} - enabled: {enabled}";
     }
 
     public override JObject Serialize() {

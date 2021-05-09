@@ -18,6 +18,7 @@ public interface BattleEntity {
   void TransferCoins(int amt);
   int calcTax(int amt);
   IItem GetItem(string name);
+  T GetItem<T>() where T : IItem;
   Optional<T> GetEffect<T>() where T : IStatusEffect;
   float GetEffectStrength<T>() where T : IStatusEffect;
   int CalculatePower();
@@ -86,6 +87,16 @@ public abstract class BattleEntityImpl<K, V> : Cacheable<K, V>, BattleEntity {
     }
 
     throw new CommandException($"You don't have a {itemName.value}");
+  }
+
+  public T GetItem<T>() where T : IItem {
+    foreach (IItem item in items) {
+      if (item is T) {
+        return item as T;
+      }
+    }
+
+    return null;
   }
   
   public Optional<T> GetEffect<T>() where T : IStatusEffect {
