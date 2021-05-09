@@ -88,20 +88,10 @@ static class CommandManager {
   }
 
   public static void AddCommands() { 
-    List<(float, ICommand)> commandsList = new List<(float, ICommand)>();
+    var commandsList = TypesWithAttribute.GetOrderedTypesWithAttribute<CommandAttribute, ICommand>();
 
-    foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
-      if (!typeof(ICommand).IsAssignableFrom(type)) continue;
-
-      foreach (CommandAttribute listing in type.GetCustomAttributes<CommandAttribute>()) {
-        int index = commandsList.FindIndex((v) => v.Item1 > listing.ordinal);
-        if (index == -1) index = commandsList.Count;
-        commandsList.Insert(index, (listing.ordinal, (ICommand)Activator.CreateInstance(type, listing.args)));
-      }
-    }
-
-    foreach ((float, ICommand) command in commandsList) {
-      commandsSet.Add(command.Item2);
+    foreach (var command in commandsList) {
+      commandsSet.Add((ICommand)Activator.CreateInstance(command.Item2, command.Item1.args));
     }
 
     AddCommandsToDictionary();

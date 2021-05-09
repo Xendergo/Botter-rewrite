@@ -47,46 +47,35 @@ public static class ItemRegistry {
   }
 
   public static void RegisterItems() {
-    List<(float, TypoableString, ItemEntry)> itemsList = new List<(float, TypoableString, ItemEntry)>();
+    var itemsList = TypesWithAttribute.GetOrderedTypesWithAttribute<ItemAttribute, IItem>();
 
-    foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
-      if (!typeof(IItem).IsAssignableFrom(type)) continue;
+    foreach(var listing in itemsList) {
+      ItemAttribute attribute = listing.Item1;
 
-      foreach (ItemAttribute listing in type.GetCustomAttributes<ItemAttribute>()) {
-        int index = itemsList.FindIndex((v) => v.Item1 > listing.ordinal);
-        if (index == -1) index = itemsList.Count;
+      ItemEntry entry = new ItemEntry {
+        name = attribute.name.value,
+        price = attribute.price,
+        category = attribute.category,
+        description = attribute.description,
+        shortDescription = attribute.shortDescription,
+        classData = new ItemClassData {
+          clazz = listing.Item2,
+          constructorArgs = attribute.args
+        }
+      };
 
-        ItemEntry entry = new ItemEntry {
-          name = listing.name.value,
-          price = listing.price,
-          category = listing.category,
-          description = listing.description,
-          shortDescription = listing.shortDescription,
-          classData = new ItemClassData {
-            clazz = type,
-            constructorArgs = listing.args
-          }
-        };
-
-        itemsList.Insert(index, (listing.ordinal, listing.name, entry));
-      }
+      items.Add(attribute.name, entry);
     }
 
-    foreach ((float, TypoableString, ItemEntry) command in itemsList) {
-      items.Add(command.Item2, command.Item3);
-    }
+    var hiddenItems = TypesWithAttribute.GetUnorderedTypesWithAttribute<HiddenItemAttribute, IItem>();
 
-    foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
-      if (!typeof(IItem).IsAssignableFrom(type)) continue;
+    foreach (var listing in hiddenItems) {
+      ItemClassData entry = new ItemClassData {
+        clazz = listing.Item2,
+        constructorArgs = listing.Item1.args
+      };
 
-      foreach (HiddenItemAttribute listing in type.GetCustomAttributes<HiddenItemAttribute>()) {
-        ItemClassData entry = new ItemClassData {
-          clazz = type,
-          constructorArgs = listing.args
-        };
-
-        notForSaleItems.Add(listing.name, entry);
-      }
+      notForSaleItems.Add(listing.Item1.name, entry);
     }
   }
 }

@@ -1,7 +1,7 @@
 using System;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class ItemAttribute : Attribute {
+public class ItemAttribute : Attribute, OrderedAttribute {
   public object[] args = null;
   public float ordinal {get;}
   public TypoableString name {get;}

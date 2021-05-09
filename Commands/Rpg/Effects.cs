@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using StatusEffects;
 
 namespace Commands {
   [Command(22)]
@@ -13,14 +15,12 @@ namespace Commands {
     public TypoableString[] aliases {get;} = new TypoableString[] {new TypoableString("effects", 1)};
     public string category {get;} = "Rpg";
     public bool admin {get;} = false;
+    private string effects = String.Join('\n', from effect in TypesWithAttribute.GetOrderedTypesWithAttribute<EffectAttribute, IStatusEffect>() select $"`{effect.Item1.name}` - {effect.Item1.description}");
     public async Task Exec(DiscordClient client, Args args, DiscordMessage msg, Guild guild, User user) {
       // There's no effects registry so I can't auto-generate the help message for them
-      await msg.RespondAsync(@"All status effects possible
+      await msg.RespondAsync(@$"All status effects possible
 
-Poison - Do damage over time
-Illness - Reduces the amount of damage you deal in a fight
-Regen - Regenerate health over time
-Stun - Prevents you from executing battle commands system");
+{effects}");
     }
   }
 }
