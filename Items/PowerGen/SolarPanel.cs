@@ -10,15 +10,16 @@ namespace Items {
     "Generate 10kw for 10 minutes",
     "Generate 10kw for 10 minutes"
   )]
-  class SolarPanel : IPowerGen {
+  class SolarPanel : IItem, IPowerGen {
     private int timeLeft = 600;
     public override string name {get;} = "solar-panel";
+    public bool enabled {get; set;} = true;
     
-    public override int CalculatePower() {
+    public int CalculatePower() {
       return 10;
     }
 
-    public override int GeneratePower() {
+    public int GeneratePower() {
       timeLeft--;
       if (timeLeft == 0) removeSelf();
       return 10;

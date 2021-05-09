@@ -2,7 +2,7 @@ using DSharpPlus.Entities;
 using System.Threading.Tasks;
 
 namespace Items {
-  abstract class IUsable : IItem {
-    public abstract Task Use(DiscordMessage msg);
+  interface IUsable {
+    public Task Use(DiscordMessage msg);
   }
 }

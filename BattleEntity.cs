@@ -117,7 +117,7 @@ public abstract class BattleEntityImpl<K, V> : Cacheable<K, V>, BattleEntity {
   public int CalculatePower() {
     int total = 0;
     foreach (IItem item in items) {
-      if (item is IPowerGen) {
+      if (item is IPowerGen && (item as IPowerGen).enabled) {
         total += (item as IPowerGen).CalculatePower();
       }
     }
@@ -148,7 +148,7 @@ public abstract class BattleEntityImpl<K, V> : Cacheable<K, V>, BattleEntity {
           goto nextConsumer;
         }
 
-        if (items[itemIndex] is IPowerGen) {
+        if (items[itemIndex] is IPowerGen && (items[itemIndex] as IPowerGen).enabled) {
           spareElectricity += (items[itemIndex] as IPowerGen).GeneratePower();
         }
       }

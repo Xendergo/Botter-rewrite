@@ -1,6 +1,6 @@
 namespace Items {
-  public abstract class IPowerGen : IItem {
-    public abstract int GeneratePower();
-    public abstract int CalculatePower();
+  public interface IPowerGen : ITogglable {
+    public int GeneratePower();
+    public int CalculatePower();
   }
 }
