@@ -1,6 +1,8 @@
 {
     "ConnectionStrings": {
         "devKey": "*key*",
-        "releaseKey": "*key*"
+        "releaseKey": "*key*",
+        "googleApiKey": "*key*",
+        "cseId": "key"
     }
 }
