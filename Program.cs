@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Runtime.CompilerServices;
+using System;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
@@ -14,21 +15,28 @@ namespace Botter_rewrite
     public static DiscordClient client;
     public static string dataPath;
     static void Main(string[] args) {
-      dataPath = args[1];
+      dataPath = args[0];
       CommandManager.AddCommands();
       ItemRegistry.RegisterItems();
       var config = new ConfigurationBuilder().AddJsonFile(dataPath + "/settings.json").Build();
       GoogleAPIKey = config.GetConnectionString("googleAPIKey");
       CseId = config.GetConnectionString("cseId");
-      MainAsync(config.GetConnectionString(args[0])).GetAwaiter().GetResult();
+
+      #if DEBUG
+        string token = config.GetConnectionString("devKey");
+      #else
+        string token = config.GetConnectionString("releaseKey");
+      #endif
+
+      MainAsync(token).GetAwaiter().GetResult();
     }
 
     static async Task MainAsync(string token) {
       await Database.Connect();
 
       DiscordClient nonStaticClient = new DiscordClient(new DiscordConfiguration {
-          Token = token,
-          TokenType = TokenType.Bot
+        Token = token,
+        TokenType = TokenType.Bot
       });
 
       client = nonStaticClient;

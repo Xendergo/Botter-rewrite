@@ -30,10 +30,14 @@ static class Database {
     NpgsqlCommand cmd = new NpgsqlCommand(req, conn);
 
     NpgsqlDataReader ret;
+
+    tryAgain:
     try {
       ret = await cmd.ExecuteReaderAsync();
     } catch (PostgresException e) {
       throw new Exception(e.Message);
+    } catch (NpgsqlOperationInProgressException e) {
+      goto tryAgain;
     }
 
     cmd.Dispose();

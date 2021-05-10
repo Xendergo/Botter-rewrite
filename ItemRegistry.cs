@@ -52,9 +52,15 @@ public static class ItemRegistry {
     foreach(var listing in itemsList) {
       ItemAttribute attribute = listing.Item1;
 
+      int price = attribute.price;
+
+      #if DEBUG
+        price = 0;
+      #endif
+
       ItemEntry entry = new ItemEntry {
         name = attribute.name.value,
-        price = attribute.price,
+        price = price,
         category = attribute.category,
         description = attribute.description,
         shortDescription = attribute.shortDescription,
