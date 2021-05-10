@@ -1,4 +1,6 @@
+using System;
 using Newtonsoft.Json.Linq;
+using StatusEffects;
 
 namespace Items {
   [Item(
@@ -7,14 +9,16 @@ namespace Items {
     3,
     100,
     "Electricity",
-    "Generate 200kw while you have coal, consumes coal every 20 seconds",
-    "Generate 200kw while you have coal, consumes coal every 20 seconds"
+    "Generate 200kw while you have coal, consumes coal every 20 seconds, gives you illness while in use",
+    "Generate 200kw, consumes coal, gives you illness while in use"
   )]
   class CoalPowerPlant : IItem, IPowerGen {
     private int timeLeft = 0;
     public override string name {get;} = "coal-power-plant";
     public bool enabled {get; set;} = true;
     private bool prevEnabled = true;
+    private bool generatingPower = false;
+    private Illness illnessEffect = null;
     
     public int CalculatePower() {
       return prevEnabled ? 200 : 0;
@@ -39,10 +43,25 @@ namespace Items {
       }
 
       prevEnabled = true;
+      generatingPower = true;
 
       timeLeft--;
 
       return 200;
+    }
+
+    public override void BattleTick() {
+      generatingPower = false;
+    }
+
+    public override void AfterBattleTick() {
+      if (generatingPower && illnessEffect is null) {
+        illnessEffect = IStatusEffect.AddStatusEffect<Illness>(owner, -1, 0.125F, owner.battle?.MostRecentChannel);
+        owner.battle?.MostRecentChannel?.SendMessageAsync("Your coal power plant is active, you now have illness effect");
+      } else if (!generatingPower && illnessEffect is not null) {
+        illnessEffect.RemoveSelf();
+        illnessEffect = null;
+      }
     }
 
     public override string Display() {

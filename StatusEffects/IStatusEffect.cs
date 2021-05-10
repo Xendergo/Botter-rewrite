@@ -17,7 +17,10 @@ namespace StatusEffects {
     protected virtual void onTick() {}
     protected virtual void onCreate() {}
     public void RemoveSelf() {
-      channel.SendMessageAsync($"You no longer have the effect **{name}**");
+      if (channel is not null) {
+        channel.SendMessageAsync($"You no longer have the effect **{name}**");
+      }
+      
       owner.effects.Remove(this);
     }
     public static T AddStatusEffect<T>(BattleEntity battleEntity, int time, float intensity, DiscordChannel channel, Predicate<IStatusEffect> predicate) where T : IStatusEffect {

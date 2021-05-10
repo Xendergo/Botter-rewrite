@@ -139,6 +139,10 @@ public abstract class BattleEntityImpl<K, V> : Cacheable<K, V>, BattleEntity {
   public void BattleTick() {
     resetKill();
 
+    foreach (var item in items) {
+      item.BattleTick();
+    }
+
     int itemIndex = items.Count;
     int spareElectricity = 0;
 
@@ -174,6 +178,10 @@ public abstract class BattleEntityImpl<K, V> : Cacheable<K, V>, BattleEntity {
       }
 
       nextConsumer:;
+    }
+
+    foreach (var item in items) {
+      item.AfterBattleTick();
     }
   }
 
