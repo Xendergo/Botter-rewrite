@@ -7,6 +7,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using System.Threading.Tasks;
 using StatusEffects;
+using Commands;
 
 struct Args {
   public Dictionary<string, string> strings;
@@ -23,7 +24,13 @@ static class CommandManager {
   public static Dictionary<TypoableString, ICommand> commands = new Dictionary<TypoableString, ICommand>();
   public static async Task OnMessage(DiscordClient client, MessageCreateEventArgs messageArgs) {
     DiscordMessage msg = messageArgs.Message;
-    if (msg?.Author?.IsBot == true) return;
+    if (msg?.Author?.IsBot == true) {
+      if (msg.Content == "There's nothing to snipe!" && msg.Author.Id == 270904126974590976 /*dank memer*/) {
+        await Snipe.DankMemerResponse(msg, messageArgs.Guild);
+      }
+
+      return;
+    }
 
     string[] text = msg.Content.ToLower().Split(" ");
 

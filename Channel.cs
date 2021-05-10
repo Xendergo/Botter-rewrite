@@ -6,6 +6,7 @@ public struct DeletedMessage {
   public string AuthorUsername;
   public ulong AuthorID;
   public string Message;
+  public IReadOnlyList<DiscordEmbed> Embeds;
 }
 
 public class EditedMessage : Cacheable<ulong, EditedMessage> {
@@ -38,7 +39,8 @@ public class Channel
     DeletedMessageStack.AddLast(new DeletedMessage() {
       AuthorUsername = msg.Author.Username,
       AuthorID = msg.Author.Id,
-      Message = msg.Content
+      Message = msg.Content,
+      Embeds = msg.Embeds
     });
   }
 

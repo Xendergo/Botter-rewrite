@@ -35,6 +35,8 @@ namespace Commands {
     }
 
     public static async void SnipeMessage(Channel channel, DiscordMessage msg, User sniper) {
+      if (channel.DeletedMessageStack.Last is null) return;
+
       DeletedMessage snipedMsg = channel.popDeletedMessage();
       DiscordEmbedBuilder embed = new DiscordEmbedBuilder();
 
@@ -52,6 +54,14 @@ namespace Commands {
       embed.WithFooter($"- {snipedMsg.AuthorUsername}");
 
       await msg.RespondAsync(embed);
+
+      if (snipedMsg.Embeds.Count > 0) {
+        await msg.RespondAsync("Embeds:");
+
+        foreach (DiscordEmbed snipedEmbed in snipedMsg.Embeds) {
+          await msg.RespondAsync(snipedEmbed);
+        }
+      }
     }
 
     public static async Task MessageDelete(DiscordClient client, MessageDeleteEventArgs args) {
@@ -60,6 +70,23 @@ namespace Commands {
       Channel channel = guild.getChannel(args.Channel.Id);
 
       channel.pushDeletedMessage(args.Message);
+    }
+
+    public static async Task DankMemerResponse(DiscordMessage msg, DiscordGuild guild) {
+      var messages = await msg.Channel.GetMessagesBeforeAsync(msg.Id, 5);
+
+      User sniper = null;
+      foreach (var message in messages) {
+        if (message.Content.IndexOf("pls snipe") != -1) {
+          sniper = await Database.getUser(message.Author.Id);
+        }
+      }
+
+      if (sniper is null) {
+        sniper = await Database.getUser(msg.Author.Id);
+      }
+
+      Snipe.SnipeMessage((await Database.getGuild(guild.Id)).getChannel(msg.ChannelId), msg, sniper);
     }
   }
 }
